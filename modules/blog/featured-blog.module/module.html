@@ -1,0 +1,177 @@
+<div class="featured-blog-section" id="featured-blog-{{ name }}">
+  <div class="wrapper">
+    {# Header Section with Title, Subtitle, and Custom Alignment #}
+    {% set align = module.header.alignment or 'left' %}
+    <div class="featured-blog-header featured-blog-header--{{ align }}">
+      <div class="featured-blog-header__text">
+        {% if module.header.subtitle %}
+          <div class="featured-blog-header__subtitle">
+            <span>{{ module.header.subtitle }}</span>
+          </div>
+        {% endif %}
+        {% if module.header.title %}
+          <h2 class="featured-blog-header__title">
+            {{ module.header.title }}
+          </h2>
+        {% endif %}
+      </div>
+
+      {# Navigation Controls (Arrows) #}
+      <div class="featured-blog-nav">
+        <button type="button" class="featured-blog-nav__btn featured-blog-nav__prev-{{ name }}" aria-label="Previous Slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button type="button" class="featured-blog-nav__btn featured-blog-nav__next-{{ name }}" aria-label="Next Slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {# Fetch Blog Posts #}
+    {% set selected_blog = module.source.blog_id or group.id or "default" %}
+    {% set post_limit = module.source.max_posts|default(8) %}
+    {% if module.source.tag %}
+      {% set posts = blog_recent_tag_posts(selected_blog, module.source.tag|trim, post_limit) %}
+    {% else %}
+      {% set posts = blog_recent_posts(selected_blog, post_limit) %}
+    {% endif %}
+
+    {# Slider Container #}
+    {% if posts|length > 0 %}
+      <div class="featured-blog-slider-wrap">
+        <div class="swiper featured-blog-slider-{{ name }}">
+          <div class="swiper-wrapper">
+            {% for item in posts %}
+              <div class="swiper-slide">
+                <article class="modern-blog-card">
+                  {# Thumbnail #}
+                  <div class="modern-blog-card__media">
+                    <a href="{{ item.absolute_url }}" class="modern-blog-card__media-link" aria-label="{{ item.name|escape_attr }}">
+                      {% if item.featured_image %}
+                        <img src="{{ resize_image_url(item.featured_image|escape_url, 600) }}" 
+                             alt="{{ item.featured_image_alt_text|default(item.name)|escape_attr }}" 
+                             loading="lazy" 
+                             width="600" 
+                             height="340"
+                             class="modern-blog-card__img">
+                      {% else %}
+                        <div class="modern-blog-card__placeholder">
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#B727F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                          </svg>
+                        </div>
+                      {% endif %}
+                    </a>
+                    
+                    {% if item.topic_list|length > 0 %}
+                      <div class="modern-blog-card__badge-wrap">
+                        <span class="modern-blog-card__badge">{{ item.topic_list[0].name }}</span>
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  {# Card Body (#FFFFFF) #}
+                  <div class="modern-blog-card__body">
+                    {% set display_date = item.publish_date ? item.publish_date|datetimeformat('%b %d, %Y') : item.publish_date_localized %}
+                    {% if display_date and (":" in display_date) and ("," in display_date) %}
+                      {% set date_parts = display_date|split(',') %}
+                      {% if date_parts|length >= 2 %}
+                        {% set display_date = date_parts[0] ~ "," ~ date_parts[1] %}
+                      {% endif %}
+                    {% endif %}
+                    {% if display_date %}
+                      <div class="modern-blog-card__meta">
+                        <time datetime="{{ item.publish_date ? item.publish_date|datetimeformat('%Y-%m-%d') : display_date }}">{{ display_date }}</time>
+                      </div>
+                    {% endif %}
+
+                    <h3 class="modern-blog-card__title">
+                      <a href="{{ item.absolute_url }}" title="{{ item.name|escape_attr }}">
+                        {{ item.name }}
+                      </a>
+                    </h3>
+
+                    <div class="modern-blog-card__description">
+                      <p>{{ item.post_list_content|truncatehtml(180, '...', false)|striptags }}</p>
+                    </div>
+
+                    <div class="modern-blog-card__footer">
+                      <a href="{{ item.absolute_url }}" class="modern-blog-card__cta">
+                        <span>{{ module.source.cta_text or 'Read Article' }}</span>
+                        <svg class="modern-blog-card__cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {# Pagination Dots #}
+        <div class="featured-blog-dots featured-blog-dots-{{ name }}"></div>
+      </div>
+    {% else %}
+      <div class="featured-blog-empty">
+        <p>No articles found for the selected filter.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% require_js %}
+<script>
+  (function() {
+    function initFeaturedSlider() {
+      if (typeof Swiper === 'undefined') {
+        setTimeout(initFeaturedSlider, 50);
+        return;
+      }
+      new Swiper('.featured-blog-slider-{{ name }}', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        speed: 600,
+        navigation: {
+          prevEl: '.featured-blog-nav__prev-{{ name }}',
+          nextEl: '.featured-blog-nav__next-{{ name }}'
+        },
+        pagination: {
+          el: '.featured-blog-dots-{{ name }}',
+          clickable: true
+        },
+        breakpoints: {
+          // Mobile: 1 card
+          0: {
+            slidesPerView: 1,
+            spaceBetween: 16
+          },
+          // Tablet: 2 cards
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 24
+          },
+          // Desktop: 4 cards
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 24
+          }
+        }
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFeaturedSlider);
+    } else {
+      initFeaturedSlider();
+    }
+  })();
+</script>
+{% end_require_js %}

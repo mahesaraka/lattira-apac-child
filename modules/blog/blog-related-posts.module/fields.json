@@ -1,0 +1,33 @@
+[
+  {
+    "id": "show_section",
+    "name": "show_section",
+    "label": "Show Related Posts Section",
+    "required": false,
+    "locked": false,
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "id": "title",
+    "name": "title",
+    "label": "Title",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "display_width": null,
+    "default": "You might also like..."
+  },
+  {
+    "id": "button_text",
+    "name": "button_text",
+    "label": "Button text",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "display_width": null,
+    "default": "See all posts"
+  }
+]

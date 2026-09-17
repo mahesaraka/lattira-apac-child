@@ -1,0 +1,50 @@
+<section class="section-card-content">
+  <div class="content-wrapper">
+    {% if module.intro_content %}
+      <div class="section-card-content__intro">
+        {{ module.intro_content }}
+      </div>
+    {% endif %}
+
+    {# Filter out any empty/unfilled cards #}
+    {% set valid_cards = [] %}
+    {% for c in module.cards %}
+      {% if c is defined and c is not none %}
+        {% set text_stripped = c.card_content|striptags|trim %}
+        {% if text_stripped|length > 0 or c.bg_image.src or c.icon.src %}
+          {% do valid_cards.append(c) %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% set total_cards = valid_cards|length %}
+
+    <div class="section-card-content__cards-container cards-count--{{ total_cards }}">
+      {% for card in valid_cards %}
+        {% set style_parts = [] %}
+        {% if card.bg_type == 'image' and card.bg_image.src %}
+          {% do style_parts.append("background-image: url('" ~ card.bg_image.src ~ "'); background-size: cover; background-position: center;") %}
+        {% elif card.bg_color.color %}
+          {% do style_parts.append("background-color: " ~ card.bg_color.color ~ ";") %}
+        {% endif %}
+
+        <div class="card-item" {% if style_parts|length > 0 %}style="{{ style_parts|join(' ') }}"{% endif %}>
+          <div class="card-item__inner">
+            {% if card.icon.src %}
+              <div class="card-item__icon">
+                {% set sizeAttrs = '' %}
+                {% if card.icon.width && card.icon.height %}
+                  {% set sizeAttrs = 'width="' ~ card.icon.width ~ '" height="' ~ card.icon.height ~ '"' %}
+                {% endif %}
+                <img src="{{ card.icon.src|escape_url }}" alt="{{ card.icon.alt|escape_attr }}" loading="lazy" {{ sizeAttrs }}>
+              </div>
+            {% endif %}
+            <div class="card-item__content">
+              {{ card.card_content }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

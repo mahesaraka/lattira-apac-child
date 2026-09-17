@@ -1,0 +1,696 @@
+[
+  {
+    "id": "1fc53fbc-a321-961b-2ad9-ebe09018650f",
+    "name": "logo",
+    "label": "Logo",
+    "required": false,
+    "locked": false,
+    "children": [
+      {
+        "id": "8cebbf5f-65b3-3b9d-13e2-9fb3b52f31fa",
+        "name": "image",
+        "label": "Image",
+        "required": false,
+        "locked": false,
+        "responsive": true,
+        "resizable": false,
+        "show_loading": false,
+        "type": "image",
+        "display_width": null,
+        "default": {
+          "size_type": "auto",
+          "src": "https://4993418.fs1.hubspotusercontent-eu1.net/hubfs/4993418/Expertunity%20Theme%20Assets/Logos/expertunity-logo.svg",
+          "alt": "expertunity-logo",
+          "loading": "lazy",
+          "width": 405,
+          "height": 68,
+          "max_width": 405,
+          "max_height": 68
+        }
+      },
+      {
+        "id": "15cb121a-3207-7a25-2c14-91c45cd31bab",
+        "name": "url",
+        "label": "URL",
+        "required": false,
+        "locked": false,
+        "supported_types": [
+          "EXTERNAL",
+          "CONTENT",
+          "FILE",
+          "EMAIL_ADDRESS",
+          "BLOG",
+          "CALL_TO_ACTION",
+          "PHONE_NUMBER",
+          "WHATSAPP_NUMBER",
+          "PAYMENT"
+        ],
+        "type": "url",
+        "display_width": null,
+        "default": {
+          "content_id": 246173779190,
+          "href": null,
+          "type": "CONTENT"
+        }
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": {
+      "image": {
+        "size_type": "auto",
+        "src": "https://4993418.fs1.hubspotusercontent-eu1.net/hubfs/4993418/Expertunity%20Theme%20Assets/Logos/expertunity-logo.svg",
+        "alt": "expertunity-logo",
+        "loading": "lazy",
+        "width": 405,
+        "height": 68,
+        "max_width": 405,
+        "max_height": 68
+      },
+      "url": {
+        "content_id": 246173779190,
+        "href": null,
+        "type": "CONTENT"
+      }
+    }
+  },
+  {
+    "id": "b67ff5e0-94cd-61b2-afa0-5a3ce55aecfd",
+    "name": "columns",
+    "label": "Columns",
+    "required": false,
+    "locked": false,
+    "occurrence": {
+      "min": 1,
+      "max": 2,
+      "sorting_label_field": "dd13406d-91b4-dd08-fbde-e900858e0b7c",
+      "default": 2
+    },
+    "children": [
+      {
+        "id": "dd13406d-91b4-dd08-fbde-e900858e0b7c",
+        "name": "title",
+        "label": "Title",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "display_width": null,
+        "default": "Column Title"
+      },
+      {
+        "id": "0ade57f5-565b-5ee4-1212-2d1135650bbc",
+        "name": "menus",
+        "label": "Menus",
+        "required": false,
+        "locked": false,
+        "occurrence": {
+          "min": 1,
+          "max": 2,
+          "sorting_label_field": null,
+          "default": 1
+        },
+        "type": "simplemenu",
+        "display_width": null,
+        "default": [
+          []
+        ]
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": [
+      {
+        "title": "Column Title",
+        "menus": [
+          []
+        ]
+      },
+      {
+        "title": "Column Title",
+        "menus": [
+          []
+        ]
+      }
+    ]
+  },
+  {
+    "id": "245a8fa0-3151-6f88-9663-9189babd2a62",
+    "name": "ctas",
+    "label": "CTAS",
+    "required": false,
+    "locked": false,
+    "occurrence": {
+      "min": 1,
+      "max": 2,
+      "sorting_label_field": "4f61e99a-f447-a47f-ecee-287bfa05513c",
+      "default": 2
+    },
+    "children": [
+      {
+        "id": "4f61e99a-f447-a47f-ecee-287bfa05513c",
+        "name": "cta_settings",
+        "label": "CTA Settings",
+        "required": false,
+        "locked": false,
+        "children": [
+          {
+            "id": "cdd98c72-6c6e-03b1-2a9c-d3b00a8fa3a3",
+            "name": "cta_type",
+            "label": "CTA Type",
+            "required": false,
+            "locked": false,
+            "display": "select",
+            "placeholder": "Button or CTA?",
+            "choices": [
+              [
+                "button",
+                "Button"
+              ],
+              [
+                "cta",
+                "Hubspot CTA"
+              ]
+            ],
+            "multiple": false,
+            "reordering_enabled": true,
+            "preset": null,
+            "type": "choice",
+            "display_width": null,
+            "default": "button"
+          },
+          {
+            "id": "0fecf7da-eaaf-d757-8903-a794c8e8daae",
+            "name": "cta_field",
+            "label": "CTA",
+            "required": false,
+            "locked": false,
+            "visibility": {
+              "controlling_field": null,
+              "controlling_field_path": "ctas.cta_settings.cta_type",
+              "controlling_value_regex": "cta",
+              "property": null,
+              "operator": "EQUAL",
+              "access": null
+            },
+            "type": "cta",
+            "display_width": null,
+            "default": ""
+          },
+          {
+            "id": "8a73a6ec-0562-314b-0b96-5105578d0da3",
+            "name": "button_settings",
+            "label": "Button Settings",
+            "required": false,
+            "locked": false,
+            "visibility": {
+              "controlling_field": null,
+              "controlling_field_path": "ctas.cta_settings.cta_type",
+              "controlling_value_regex": "button",
+              "property": null,
+              "operator": "EQUAL",
+              "access": null
+            },
+            "children": [
+              {
+                "id": "f360231a-bec6-734b-ea33-4da46c0239b1",
+                "name": "button_type",
+                "label": "Button Type",
+                "inline_help_text": "These options and values in this module should match your button class styles for this to work correctly.",
+                "required": false,
+                "locked": false,
+                "display": "select",
+                "placeholder": "Please choose a button style",
+                "choices": [
+                  [
+                    "primary-cta",
+                    "Primary CTA"
+                  ],
+                  [
+                    "secondary-cta",
+                    "Secondary CTA"
+                  ]
+                ],
+                "multiple": false,
+                "reordering_enabled": true,
+                "preset": null,
+                "type": "choice",
+                "display_width": null
+              },
+              {
+                "id": "bc1af4c0-f2e9-2896-e05c-3ce23edd19f4",
+                "name": "button_colour",
+                "label": "Button Colour",
+                "inline_help_text": "",
+                "required": false,
+                "locked": false,
+                "display": "select",
+                "placeholder": "Please Choose A Button Colour",
+                "choices": [
+                  [
+                    "purple-cta",
+                    "Purple"
+                  ],
+                  [
+                    "orange-cta",
+                    "Orange"
+                  ],
+                  [
+                    "white-cta",
+                    "White"
+                  ]
+                ],
+                "multiple": false,
+                "reordering_enabled": true,
+                "preset": null,
+                "type": "choice",
+                "display_width": null,
+                "default": "purple-cta"
+              },
+              {
+                "id": "6dc49deb-a278-eb52-0e46-402b4309e6ff",
+                "name": "button_text",
+                "label": "Button Text",
+                "required": false,
+                "locked": false,
+                "placeholder": "Button Text",
+                "allow_new_line": false,
+                "type": "text",
+                "display_width": null,
+                "default": "Button Text"
+              },
+              {
+                "id": "0033e7c7-6a63-c3f9-c9c7-93794d3fe53c",
+                "name": "button_url",
+                "label": "Button URL",
+                "required": false,
+                "locked": false,
+                "supported_types": [
+                  "EXTERNAL",
+                  "CONTENT",
+                  "FILE",
+                  "EMAIL_ADDRESS",
+                  "BLOG",
+                  "CALL_TO_ACTION",
+                  "PHONE_NUMBER"
+                ],
+                "show_advanced_rel_options": false,
+                "type": "link",
+                "display_width": null,
+                "default": {
+                  "url": {
+                    "content_id": null,
+                    "type": "EXTERNAL",
+                    "href": ""
+                  },
+                  "open_in_new_tab": false,
+                  "no_follow": false
+                }
+              }
+            ],
+            "tab": "CONTENT",
+            "expanded": false,
+            "group_occurrence_meta": null,
+            "type": "group",
+            "display_width": null,
+            "default": {
+              "button_colour": "purple-cta",
+              "button_text": "Button Text",
+              "button_url": {
+                "url": {
+                  "content_id": null,
+                  "type": "EXTERNAL",
+                  "href": ""
+                },
+                "open_in_new_tab": false,
+                "no_follow": false
+              }
+            }
+          }
+        ],
+        "tab": "CONTENT",
+        "expanded": false,
+        "group_occurrence_meta": null,
+        "type": "group",
+        "display_width": null,
+        "default": {
+          "cta_type": "button",
+          "cta_field": "",
+          "button_settings": {
+            "button_colour": "purple-cta",
+            "button_text": "Button Text",
+            "button_url": {
+              "url": {
+                "content_id": null,
+                "type": "EXTERNAL",
+                "href": ""
+              },
+              "open_in_new_tab": false,
+              "no_follow": false
+            }
+          }
+        }
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": [
+      {
+        "cta_settings": {
+          "show_cta": true,
+          "cta_type": "button",
+          "cta_field": "",
+          "button_settings": {
+            "button_colour": "purple-cta",
+            "button_text": "Button Text",
+            "button_url": {
+              "url": {
+                "content_id": null,
+                "type": "EXTERNAL",
+                "href": ""
+              },
+              "open_in_new_tab": false,
+              "no_follow": false
+            }
+          }
+        }
+      },
+      {
+        "cta_settings": {
+          "show_cta": true,
+          "cta_type": "button",
+          "cta_field": "",
+          "button_settings": {
+            "button_colour": "purple-cta",
+            "button_text": "Button Text",
+            "button_url": {
+              "url": {
+                "content_id": null,
+                "type": "EXTERNAL",
+                "href": ""
+              },
+              "open_in_new_tab": false,
+              "no_follow": false
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "743ac966-f803-b8dd-fb80-99f3001d801a",
+    "name": "links",
+    "label": "Links",
+    "required": false,
+    "locked": false,
+    "occurrence": {
+      "min": 1,
+      "max": 5,
+      "sorting_label_field": "030a70c3-bee6-329a-2a1c-c4262d25f722",
+      "default": 1
+    },
+    "children": [
+      {
+        "id": "d19e0d99-e44f-bf5e-466c-634d2ee4ce89",
+        "name": "type",
+        "label": "Link Type",
+        "required": false,
+        "locked": false,
+        "display": "select",
+        "placeholder": "Select Link Type",
+        "choices": [
+          [
+            "standard",
+            "Standard"
+          ],
+          [
+            "social",
+            "Social"
+          ]
+        ],
+        "multiple": false,
+        "reordering_enabled": true,
+        "preset": null,
+        "type": "choice",
+        "display_width": null
+      },
+      {
+        "id": "link",
+        "name": "link",
+        "label": "Link",
+        "required": false,
+        "locked": false,
+        "supported_types": [
+          "EXTERNAL",
+          "CONTENT",
+          "FILE",
+          "EMAIL_ADDRESS",
+          "BLOG",
+          "CALL_TO_ACTION",
+          "PHONE_NUMBER"
+        ],
+        "show_advanced_rel_options": false,
+        "type": "link",
+        "display_width": null,
+        "default": {
+          "url": {
+            "content_id": null,
+            "type": "EXTERNAL",
+            "href": ""
+          },
+          "open_in_new_tab": false,
+          "no_follow": false
+        }
+      },
+      {
+        "name": "icon_type",
+        "label": "Display Type (Icon or Image)",
+        "type": "choice",
+        "display": "select",
+        "choices": [
+          [
+            "icon",
+            "FontAwesome Icon"
+          ],
+          [
+            "image",
+            "Custom Image"
+          ]
+        ],
+        "default": "icon"
+      },
+      {
+        "id": "bfd5180b-24b1-e570-7757-d5906ec364c8",
+        "name": "icon",
+        "label": "Icon",
+        "required": false,
+        "locked": false,
+        "icon_set": "fontawesome-6.4.2",
+        "type": "icon",
+        "display_width": null,
+        "default": {
+          "name": "LinkedIn In",
+          "unicode": "f0e1",
+          "type": "REGULAR"
+        }
+      },
+      {
+        "name": "image",
+        "label": "Image (SVG / PNG)",
+        "type": "image",
+        "responsive": true,
+        "resizable": false,
+        "show_loading": false,
+        "default": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        }
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": [
+      {
+        "url": {
+          "content_id": null,
+          "href": "",
+          "type": "EXTERNAL"
+        },
+        "icon": {
+          "name": "LinkedIn In",
+          "unicode": "f0e1",
+          "type": "REGULAR"
+        }
+      }
+    ]
+  },
+  {
+    "id": "87efd536-05a4-0286-58c4-9e33e4e5a28e",
+    "name": "lower_footer",
+    "label": "Lower Footer",
+    "required": false,
+    "locked": false,
+    "children": [
+      {
+        "id": "d05d90d9-24f1-94c3-ed18-3c9f76d17b2b",
+        "name": "tagline",
+        "label": "Tagline",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "display_width": null,
+        "default": "Where Construction Connects"
+      },
+      {
+        "id": "8a6b2178-0ef2-83d1-4345-585d1a0058c7",
+        "name": "copywrite_notice",
+        "label": "Copywrite Notice",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "display_width": null,
+        "default": "Copyright 2025 Hubexo"
+      },
+      {
+        "id": "e5d14675-7a18-8703-fbfb-5efe91b5e92f",
+        "name": "menu",
+        "label": "Policy Menu",
+        "required": false,
+        "locked": false,
+        "type": "simplemenu",
+        "display_width": null,
+        "default": [
+          {
+            "isPublished": false,
+            "pageLinkId": null,
+            "contentGroupId": null,
+            "pageLinkName": null,
+            "isDeleted": null,
+            "categoryId": null,
+            "subCategory": null,
+            "contentType": null,
+            "state": null,
+            "linkLabel": "Terms",
+            "linkUrl": null,
+            "linkParams": null,
+            "linkTarget": null,
+            "type": "PAGE_LINK",
+            "children": []
+          },
+          {
+            "isPublished": false,
+            "pageLinkId": null,
+            "contentGroupId": null,
+            "pageLinkName": null,
+            "isDeleted": null,
+            "categoryId": null,
+            "subCategory": null,
+            "contentType": null,
+            "state": null,
+            "linkLabel": "Privacy",
+            "linkUrl": null,
+            "linkParams": null,
+            "linkTarget": null,
+            "type": "PAGE_LINK",
+            "children": []
+          },
+          {
+            "isPublished": false,
+            "pageLinkId": null,
+            "contentGroupId": null,
+            "pageLinkName": null,
+            "isDeleted": null,
+            "categoryId": null,
+            "subCategory": null,
+            "contentType": null,
+            "state": null,
+            "linkLabel": "Cookie",
+            "linkUrl": null,
+            "linkParams": null,
+            "linkTarget": null,
+            "type": "PAGE_LINK",
+            "children": []
+          }
+        ]
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": {
+      "tagline": "Where Construction Connects",
+      "copywrite_notice": "Copyright 2025 Hubexo",
+      "menu": [
+        {
+          "isPublished": false,
+          "pageLinkId": null,
+          "contentGroupId": null,
+          "pageLinkName": null,
+          "isDeleted": null,
+          "categoryId": null,
+          "subCategory": null,
+          "contentType": null,
+          "state": null,
+          "linkLabel": "Terms",
+          "linkUrl": null,
+          "linkParams": null,
+          "linkTarget": null,
+          "type": "PAGE_LINK",
+          "children": []
+        },
+        {
+          "isPublished": false,
+          "pageLinkId": null,
+          "contentGroupId": null,
+          "pageLinkName": null,
+          "isDeleted": null,
+          "categoryId": null,
+          "subCategory": null,
+          "contentType": null,
+          "state": null,
+          "linkLabel": "Privacy",
+          "linkUrl": null,
+          "linkParams": null,
+          "linkTarget": null,
+          "type": "PAGE_LINK",
+          "children": []
+        },
+        {
+          "isPublished": false,
+          "pageLinkId": null,
+          "contentGroupId": null,
+          "pageLinkName": null,
+          "isDeleted": null,
+          "categoryId": null,
+          "subCategory": null,
+          "contentType": null,
+          "state": null,
+          "linkLabel": "Cookie",
+          "linkUrl": null,
+          "linkParams": null,
+          "linkTarget": null,
+          "type": "PAGE_LINK",
+          "children": []
+        }
+      ]
+    }
+  }
+]

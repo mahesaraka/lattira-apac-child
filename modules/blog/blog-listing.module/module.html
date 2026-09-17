@@ -1,0 +1,187 @@
+<div class="modern-blog-listing">
+  {# Header Section #}
+  {% set align = module.header.alignment or 'center' %}
+  <section class="modern-blog-header modern-blog-header--{{ align }}">
+    <div class="wrapper">
+      <div class="modern-blog-header__content">
+        {% if module.header.subtitle %}
+          <div class="modern-blog-header__subtitle">
+            <span>{{ module.header.subtitle }}</span>
+          </div>
+        {% endif %}
+
+        <h1 class="modern-blog-header__title">
+          {% if module.header.title %}
+            {{ module.header.title }}
+          {% else %}
+            {{ group.public_title }}
+          {% endif %}
+        </h1>
+
+        {% if module.header.description %}
+          <div class="modern-blog-header__desc">
+            <p>{{ module.header.description }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {# Tags Filter Section #}
+  {% if module.tags_settings.show_tags %}
+    {% set tags = blog_tags('default') %}
+    <section class="modern-blog-tags">
+      <div class="wrapper">
+        <div class="modern-blog-tags__list modern-blog-tags__list--{{ align }}">
+          <a href="{{ group.absolute_url }}" class="modern-blog-tag {% if not topic %}is-active{% endif %}">
+            <span class="modern-blog-tag__text">{{ module.tags_settings.all_tag or 'All' }}</span>
+          </a>
+          {% for tag in tags %}
+            {% unless tag.name|lower == "featured" %}
+              <a href="{{ blog_tag_url(group.id, tag.slug) }}" class="modern-blog-tag {% if tag.slug == topic %}is-active{% endif %}">
+                <span class="modern-blog-tag__text">{{ tag.name }}</span>
+              </a>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {# Blog Cards Grid Section #}
+  <section class="modern-blog-cards">
+    <div class="wrapper">
+      {% if contents|length > 0 %}
+        <div class="modern-blog-grid">
+          {% for content in contents %}
+            <article class="modern-blog-card">
+              {# Thumbnail #}
+              <div class="modern-blog-card__media">
+                <a href="{{ content.absolute_url }}" class="modern-blog-card__media-link" aria-label="{{ content.name|escape_attr }}">
+                  {% if content.featured_image %}
+                    <img src="{{ resize_image_url(content.featured_image|escape_url, 600) }}" 
+                         alt="{{ content.featured_image_alt_text|default(content.name)|escape_attr }}" 
+                         loading="lazy" 
+                         width="600" 
+                         height="340"
+                         class="modern-blog-card__img">
+                  {% else %}
+                    <div class="modern-blog-card__placeholder">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#B727F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                      </svg>
+                    </div>
+                  {% endif %}
+                </a>
+                
+                {% if content.topic_list|length > 0 %}
+                  <div class="modern-blog-card__badge-wrap">
+                    <span class="modern-blog-card__badge">{{ content.topic_list[0].name }}</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              {# Card Body (#FFFFFF) #}
+              <div class="modern-blog-card__body">
+                <div class="modern-blog-card__meta">
+                  {% set display_date = content.publish_date ? content.publish_date|datetimeformat('%b %d, %Y') : content.publish_date_localized %}
+                  {% if display_date and (":" in display_date) and ("," in display_date) %}
+                    {% set date_parts = display_date|split(',') %}
+                    {% if date_parts|length >= 2 %}
+                      {% set display_date = date_parts[0] ~ "," ~ date_parts[1] %}
+                    {% endif %}
+                  {% endif %}
+                  <time datetime="{{ content.publish_date ? content.publish_date|datetimeformat('%Y-%m-%d') : display_date }}">{{ display_date }}</time>
+                </div>
+
+                <h3 class="modern-blog-card__title">
+                  <a href="{{ content.absolute_url }}" title="{{ content.name|escape_attr }}">
+                    {{ content.name }}
+                  </a>
+                </h3>
+
+                <div class="modern-blog-card__description">
+                  <p>{{ content.post_list_content|truncatehtml(180, '...', false)|striptags }}</p>
+                </div>
+
+                <div class="modern-blog-card__footer">
+                  <a href="{{ content.absolute_url }}" class="modern-blog-card__cta">
+                    <span>{{ module.cards_settings.read_more_text or 'Read Article' }}</span>
+                    <svg class="modern-blog-card__cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="modern-blog-empty">
+          <p>No articles found.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# Pagination Section #}
+  {% if contents.total_page_count > 1 %}
+    <nav class="modern-blog-pagination" aria-label="Blog pagination">
+      <div class="wrapper">
+        <ul class="modern-blog-pagination__list">
+          {# Previous Page Link #}
+          {% if current_page_num > 1 %}
+            <li class="modern-blog-pagination__item">
+              <a href="{{ blog_page_link(current_page_num - 1) }}" class="modern-blog-pagination__link modern-blog-pagination__prev" aria-label="Previous Page">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </a>
+            </li>
+          {% endif %}
+
+          {# Page numbers logic #}
+          {% set page_list = [-2, -1, 0, 1, 2] %}
+          {% if contents.total_page_count - current_page_num == 1 %}
+            {% set offset = -1 %}
+          {% elif contents.total_page_count - current_page_num == 0 %}
+            {% set offset = -2 %}
+          {% elif current_page_num == 2 %}
+            {% set offset = 1 %}
+          {% elif current_page_num == 1 %}
+            {% set offset = 2 %}
+          {% else %}
+            {% set offset = 0 %}
+          {% endif %}
+
+          {% for page in page_list %}
+            {% set this_page = current_page_num + page + offset %}
+            {% if this_page > 0 and this_page <= contents.total_page_count %}
+              <li class="modern-blog-pagination__item">
+                <a href="{{ blog_page_link(this_page) }}" 
+                   class="modern-blog-pagination__link {% if this_page == current_page_num %}is-active{% endif %}"
+                   {% if this_page == current_page_num %}aria-current="page"{% endif %}>
+                  {{ this_page }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {# Next Page Link #}
+          {% if current_page_num < contents.total_page_count %}
+            <li class="modern-blog-pagination__item">
+              <a href="{{ blog_page_link(current_page_num + 1) }}" class="modern-blog-pagination__link modern-blog-pagination__next" aria-label="Next Page">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  {% endif %}
+</div>

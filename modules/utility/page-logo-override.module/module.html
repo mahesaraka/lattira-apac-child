@@ -1,0 +1,92 @@
+{# This module doesn't render any visible HTML. It only injects Javascript to swap the logos on the global header/footer if no override module is present. #}
+
+{% require_js %}
+<script>
+  (function() {
+    function applyLogoOverrides() {
+      // 1. HEADER LOGO OVERRIDE:
+      // Priority rule: If [U] Header Override (.header-override) is present, it takes priority and we do not touch the header.
+      var hasHeaderOverride = document.querySelector('.header-override');
+      if (!hasHeaderOverride) {
+        var header = document.querySelector('header.header-wrapper:not(.header-override)');
+        if (header) {
+          {% if module.header_desktop_logo.src %}
+            var desktopLogo = header.querySelector('.desktop-logo');
+            if (desktopLogo) {
+              desktopLogo.src = "{{ module.header_desktop_logo.src }}";
+              desktopLogo.srcset = "";
+            }
+          {% endif %}
+
+          {% if module.header_sticky_logo.src %}
+            var stickyLogo = header.querySelector('.sticky-logo');
+            if (stickyLogo) {
+              stickyLogo.src = "{{ module.header_sticky_logo.src }}";
+              stickyLogo.srcset = "";
+            }
+          {% endif %}
+
+          {% if module.header_logo_link.href %}
+            var headerLink = header.querySelector('.logo-cover-link');
+            if (headerLink) {
+              headerLink.href = "{{ module.header_logo_link.href }}";
+            }
+          {% endif %}
+
+          // Header Pill Toggle Override
+          {% if module.override_pill_toggle == "pill_1" %}
+            header.querySelectorAll('.header-pill-toggle').forEach(function(t) {
+              t.querySelectorAll('.header-pill-toggle__item').forEach(function(el) {
+                if (el.getAttribute('data-pill') === '1') el.classList.add('is-active');
+                else el.classList.remove('is-active');
+              });
+            });
+          {% elif module.override_pill_toggle == "pill_2" %}
+            header.querySelectorAll('.header-pill-toggle').forEach(function(t) {
+              t.querySelectorAll('.header-pill-toggle__item').forEach(function(el) {
+                if (el.getAttribute('data-pill') === '2') el.classList.add('is-active');
+                else el.classList.remove('is-active');
+              });
+            });
+          {% elif module.override_pill_toggle == "inactive" %}
+            header.querySelectorAll('.header-pill-toggle').forEach(function(t) {
+              t.querySelectorAll('.header-pill-toggle__item').forEach(function(el) {
+                el.classList.remove('is-active');
+              });
+            });
+          {% endif %}
+        }
+      }
+
+      // 2. FOOTER LOGO OVERRIDE:
+      // Priority rule: If [U] Footer Override (.footer-override) is present, it takes priority and we do not touch the footer.
+      var hasFooterOverride = document.querySelector('.footer-override');
+      if (!hasFooterOverride) {
+        var footer = document.querySelector('footer.footer:not(.footer-override)');
+        if (footer) {
+          {% if module.footer_logo.src %}
+            var footerLogo = footer.querySelector('.footer__logo img');
+            if (footerLogo) {
+              footerLogo.src = "{{ module.footer_logo.src }}";
+              footerLogo.srcset = "";
+            }
+          {% endif %}
+
+          {% if module.footer_logo_link.href %}
+            var footerLink = footer.querySelector('.footer__logo .cover-link');
+            if (footerLink) {
+              footerLink.href = "{{ module.footer_logo_link.href }}";
+            }
+          {% endif %}
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyLogoOverrides);
+    } else {
+      applyLogoOverrides();
+    }
+  })();
+</script>
+{% end_require_js %}

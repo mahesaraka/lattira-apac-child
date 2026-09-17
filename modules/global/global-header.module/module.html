@@ -1,0 +1,418 @@
+{% macro render_pill_toggle(is_mobile=false) %}
+  {% set p = module.pill_toggle %}
+  {% if p.enable_pill_toggle %}
+    {# Determine Active Pill #}
+    {% set p1_keyword = (p.pill_1.url_keyword || 'spec')|lower %}
+    {% set p2_keyword = (p.pill_2.url_keyword || 'source')|lower %}
+    
+    {% set p1_active = false %}
+    {% set p2_active = false %}
+    
+    {% if p.detection_mode == "manual" %}
+      {% set p1_active = p.pill_1.is_active %}
+      {% set p2_active = p.pill_2.is_active %}
+    {% else %}
+      {# Auto mode: Match page path/slug using exact segment/delimiter boundaries #}
+      {% set target_path = (request.path ~ " " ~ content.slug)|lower %}
+      {% set url_clean = ("-" ~ target_path ~ "-")|replace('/', '-')|replace('_', '-')|replace('?', '-')|replace('&', '-')|replace('.', '-')|replace('=', '-')|replace(' ', '-') %}
+      {% set p1_match = p1_keyword and (("-" ~ p1_keyword ~ "-") in url_clean) %}
+      {% set p2_match = p2_keyword and (("-" ~ p2_keyword ~ "-") in url_clean) %}
+      
+      {% if p1_match and not p2_match %}
+        {% set p1_active = true %}
+      {% elif p2_match and not p1_match %}
+        {% set p2_active = true %}
+      {% elif p1_match and p2_match %}
+        {# Both keywords matched: prioritize specific "lattira-[keyword]" prefix #}
+        {% if ("-lattira-" ~ p1_keyword ~ "-") in url_clean %}
+          {% set p1_active = true %}
+        {% elif ("-lattira-" ~ p2_keyword ~ "-") in url_clean %}
+          {% set p2_active = true %}
+        {% else %}
+          {% set p1_active = true %}
+        {% endif %}
+      {% else %}
+        {# Fallback: check href match against request.path #}
+        {% if p.pill_1.url.url.href and (p.pill_1.url.url.href|lower in (request.path|lower)) %}
+          {% set p1_active = true %}
+        {% elif p.pill_2.url.url.href and (p.pill_2.url.url.href|lower in (request.path|lower)) %}
+          {% set p2_active = true %}
+        {% else %}
+          {# Neither matches (e.g. /au/about-us): Neither pill is active #}
+          {% set p1_active = false %}
+          {% set p2_active = false %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    <div class="header-pill-toggle-wrapper{% if is_mobile %} header-pill-toggle-wrapper--mobile{% endif %}" 
+         data-detection="{{ p.detection_mode || 'auto' }}"
+         data-p1-keyword="{{ p1_keyword }}"
+         data-p2-keyword="{{ p2_keyword }}">
+      <div class="header-pill-toggle" role="group" aria-label="Toggle">
+        {# Pill 1 #}
+        {% set p1_href = p.pill_1.url.url.href %}
+        {% if p.pill_1.url.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set p1_href = "mailto:" + p1_href %}
+        {% elif p.pill_1.url.url.type is equalto "PHONE_NUMBER" %}
+          {% set p1_href = "tel:" + p1_href %}
+        {% endif %}
+        {% if !p1_href %}{% set p1_href = "#" %}{% endif %}
+
+        <a 
+          href="{{ p1_href }}"
+          class="header-pill-toggle__item{% if p1_active %} is-active{% endif %}"
+          {% if p.pill_1.url.open_in_new_tab %}target="_blank"{% endif %}
+          {% if p.pill_1.url.no_follow %}rel="nofollow"{% endif %}
+          data-pill="1"
+          data-keyword="{{ p1_keyword }}"
+        >
+          <span>{{ p.pill_1.text || 'Spec' }}</span>
+        </a>
+
+        {# Pill 2 #}
+        {% set p2_href = p.pill_2.url.url.href %}
+        {% if p.pill_2.url.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set p2_href = "mailto:" + p2_href %}
+        {% elif p.pill_2.url.url.type is equalto "PHONE_NUMBER" %}
+          {% set p2_href = "tel:" + p2_href %}
+        {% endif %}
+        {% if !p2_href %}{% set p2_href = "#" %}{% endif %}
+
+        <a 
+          href="{{ p2_href }}"
+          class="header-pill-toggle__item{% if p2_active %} is-active{% endif %}"
+          {% if p.pill_2.url.open_in_new_tab %}target="_blank"{% endif %}
+          {% if p.pill_2.url.no_follow %}rel="nofollow"{% endif %}
+          data-pill="2"
+          data-keyword="{{ p2_keyword }}"
+        >
+          <span>{{ p.pill_2.text || 'Source' }}</span>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% set header_theme = widget_data.utility_menu_theme.menu_theme %}
+{% set hide_menu = widget_data.utility_menu_theme.hide_navigation %}
+
+<header class="header-wrapper {{ header_theme }}">
+  <div class="content-wrapper">
+    <div class="header-column logo">
+      <a href="{{ module.logos.logo_url.href || '/'  }}" class="logo-cover-link"></a>
+      <img src="{{ module.logos.desktop_logo.src }}" alt="{{ module.logos.desktop_logo.alt }}" class="desktop-logo"
+        loading="lazy" />
+      <img src="{{ module.logos.sticky_logo.src }}" alt="{{ module.logos.sticky_logo.alt }}" class="sticky-logo"
+        loading="lazy" />
+    </div>
+    {% if !hide_menu %}
+    <div class="header-column nav-cta-wrapper">
+      <div class="header-column navigation">
+        <nav>
+          <ul class="nav-ul">
+            {% for navigation_item in module.navigation.navigation_items %}
+            {% if navigation_item.add_child_menu %}
+            <li class="nav-li {% if navigation_item.child_menu|length >= 2 %}mega{% endif %}">
+              <a href="{% if navigation_item.url.href %}{{ navigation_item.url.href }}{% else %}javascript:void(0){% endif %}"
+                class="nav-link has-child top-menu-link">{{ navigation_item.url_text }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                  <path
+                    d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
+                    stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+              {% if navigation_item.child_menu|length >= 9999 %}
+              {% else %}
+              {% for child_menu in navigation_item.child_menu %}
+
+              <ul class="
+                nav-child-ul
+                {% if (child_menu.child_menu_links | length > 3) and (child_menu.layout_settings == 'show_desc') %}  {% endif %}
+                ">
+                {% for navigation_item in child_menu.child_menu_links %}
+                <li class="nav-child-li {% if navigation_item.child_menu_items | length > 0 %}has-child{% endif %}">
+
+                  <a href="{{ navigation_item.url_field.href }}" class="nav-link">
+                    <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M16 32.8C24.8366 32.8 32 25.6366 32 16.8C32 7.96349 24.8366 0.800049 16 0.800049C7.16344 0.800049 0 7.96349 0 16.8C0 25.6366 7.16344 32.8 16 32.8Z"
+                        fill="white" />
+                      <path
+                        d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z"
+                        fill="#321432" />
+                    </svg>
+
+                    <span>{{ navigation_item.url_text }}</span>
+                    {% if navigation_item.child_menu_items | length > 0 %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                      <path
+                        d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
+                        stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    {% endif %}
+                  </a>
+                  {% if child_menu.layout_settings == "show_desc" %}
+                  <p class="child-menu-description">{{ navigation_item.description }}</p>
+                  {% endif %}
+                  {% if navigation_item.child_menu_items | length > 0 %}
+                  <ul>
+                    {% for child_nav_item in navigation_item.child_menu_items %}
+                    <li>
+                      <a href="{{ child_nav_item.url }}" class="nav-link">
+                        {{ child_nav_item.linkLabel }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endfor %} {% endif %}
+            </li>
+            {% else %}
+            <li class="nav-li">
+              <a href="{{ navigation_item.url.href }}" class="nav-link top-menu-link">{{ navigation_item.url_text }}</a>
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
+        </nav>
+        {{ render_pill_toggle(false) }}
+      </div>
+      <div class="header-column cta">
+        {% if content.translated_content.values()|selectattr('published')|length || is_listing_view &&
+        group.translations %}
+        <div class="custom-language header__language-switcher header--element">
+          <div class="header__language-switcher--label">
+            {% language_switcher display_mode='pagelang' %}
+            {#<div class="header__language-switcher--label-current"> {{ locale_name(locale) }}</div>#}
+          </div>
+        </div>
+        {% endif %}
+        {% for cta in module.ctas %}
+        <div class="cta">
+          {% if cta.cta_settings.cta_type == 'cta' %}
+          {% cta guid="{{ cta.cta_settings.cta_field }}" %}
+          {% else %}
+          {% set href = cta.cta_settings.button_settings.button_url.url.href %}
+          {% if cta.cta_settings.button_settings.button_url.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+          {% elif cta.cta_settings.button_settings.button_url.url.type is equalto "PHONE_NUMBER" %}
+          {% set href = "tel:" + href %}
+          {% endif %}
+
+          <a {% if cta.cta_settings.button_settings.button_url.url.type is equalto "CALL_TO_ACTION" %} href="{{ href }}"
+            {# The href here is not escaped as it is not editable and functions as a JavaScript call to the associated
+            CTA #} {% else %} href="{{ href|escape_url }}" {% endif %} {% if
+            cta.cta_settings.button_settings.button_url.open_in_new_tab %} target="_blank" {% endif %} {% if
+            cta.cta_settings.button_settings.button_url.rel %}
+            rel="{{ cta.cta_settings.button_settings.button_url.rel|escape_attr }}" {% endif %}
+            class="{{ cta.cta_settings.button_settings.button_type }} {{ cta.cta_settings.button_settings.button_colour }} header-btn-{{ loop.index }}"
+            aria-label="{{ cta.cta_settings.button_settings.button_text }}">
+            {{ cta.cta_settings.button_settings.button_text }}
+          </a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="header-column mobile-menu">
+        <div class="hamburger" id="hamburger-8">
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+  </div>
+
+  <!-- 
+**********************************
+MOBILE MENU
+********************************** -->
+
+
+  <div class="mobile-menu-content hidden">
+    <nav>
+      <ul class="nav-ul">
+        {% for navigation_item in module.navigation.navigation_items %} {% if
+        navigation_item.add_child_menu %}
+        <li class="nav-li nav-accordion">
+          <a {% if navigation.url.href %}href="{{ navigation.url.href }}" {% endif %} class="nav-link has-child">{{
+            navigation_item.url_text }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+              <path
+                d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
+                stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <div class="accordion-content">
+            {% if navigation_item.child_menu|length >= 2 %}
+            {% else %}
+            {% for child_menu in navigation_item.child_menu %}
+            <ul class="nav-child-ul">
+              {% for navigation_item in child_menu.child_menu_links %}
+              <li class="nav-child-li {% if navigation_item.child_menu_items | length > 0 %}has-child{% endif %}">
+                <a {% if navigation_item.url_field.href %}href="{{ navigation_item.url_field.href }}" {% endif %}
+                  class="nav-link">
+                  <span>{{ navigation_item.url_text }} </span>
+                  {% if navigation_item.child_menu_items | length > 0 %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                    <path
+                      d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
+                      stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  {% endif %}
+                </a>
+                {% if navigation_item.child_menu_items | length > 0 %}
+                <ul class="asd">
+                  {% for child_nav_item in navigation_item.child_menu_items %}
+                  <li>
+                    <a href="{{ child_nav_item.url }}" class="nav-link">
+                      {{child_nav_item.linkLabel}}
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endfor %} {% endif %}
+          </div>
+        </li>
+        {% else %}
+        <li class="nav-li">
+          <a href="{{ navigation_item.url.href }}" class="nav-link">{{ navigation_item.url_text }}</a>
+
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </nav>
+    {{ render_pill_toggle(true) }}
+    <div class="mobile-cta">
+      {% for cta in module.ctas %}
+      {% if cta.cta_settings.cta_type == 'cta' %} {% cta guid="{{
+      cta.cta_settings.cta_field }}" %} {% else %}
+      <a class="{{cta.cta_settings.button_settings.button_type}} {{cta.cta_settings.button_settings.button_colour}} header-btn-{{ loop.index }} primary-cta--filled"
+        href="{{ cta.cta_settings.button_settings.button_url.href }}">{{ cta.cta_settings.button_settings.button_text
+        }}</a>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+</header>
+
+{% require_css %}
+<style>
+  /* Navigation & Pill Toggle Alignment */
+  header.header-wrapper .content-wrapper .header-column.navigation {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  /* Pill Toggle Styles */
+  {% set p_styles = module.pill_toggle.styles %}
+
+  .header-pill-toggle-wrapper {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .header-pill-toggle {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 9999px;
+    background-color: {{ p_styles.container_bg_color.color || '#F4F4F6' }};
+    border: 1px solid {{ p_styles.container_border_color.color || '#E5E7EB' }};
+    box-sizing: border-box;
+    gap: 2px;
+  }
+
+  .header-pill-toggle__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 18px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none !important;
+    color: {{ p_styles.inactive_text_color.color || '#4D4D4D' }} !important;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .header-pill-toggle__item.is-active,
+  .header-pill-toggle__item:hover {
+    background-color: {{ p_styles.active_bg_color.color || '#600087' }} !important;
+    color: {{ p_styles.active_text_color.color || '#FFFFFF' }} !important;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Mobile pill toggle */
+  .header-pill-toggle-wrapper--mobile {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .header-pill-toggle-wrapper--mobile .header-pill-toggle {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .header-pill-toggle-wrapper--mobile .header-pill-toggle__item {
+    flex: 1;
+    text-align: center;
+    padding: 8px 16px;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    header.header-wrapper .content-wrapper .header-column.navigation {
+      display: none !important;
+    }
+  }
+
+  {% for cta in module.ctas %}
+    {% set btn = cta.cta_settings.button_settings %}
+    {% if btn.button_colour == "manual-cta" %}
+      .header-btn-{{ loop.index }}.manual-cta {
+        {% if btn.background_color.color %}
+          background-color: {{ btn.background_color.color }} !important;
+        {% endif %}
+        {% if btn.border_color.color %}
+          border: 2px solid {{ btn.border_color.color }} !important;
+          border-color: {{ btn.border_color.color }} !important;
+        {% endif %}
+        {% if btn.button_text_color.color %}
+          color: {{ btn.button_text_color.color }} !important;
+        {% endif %}
+      }
+
+      .header-btn-{{ loop.index }}.manual-cta:hover {
+        {% if btn.background_color_hover.color %}
+          background-color: {{ btn.background_color_hover.color }} !important;
+        {% endif %}
+        {% if btn.border_color_hover.color %}
+          border-color: {{ btn.border_color_hover.color }} !important;
+        {% endif %}
+        {% if btn.button_text_color_hover.color %}
+          color: {{ btn.button_text_color_hover.color }} !important;
+        {% endif %}
+      }
+    {% endif %}
+  {% endfor %}
+</style>
+{% end_require_css %}

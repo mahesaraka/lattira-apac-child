@@ -1,0 +1,111 @@
+<div class="featured-single-blog-section" id="featured-single-blog-{{ name }}">
+  <div class="wrapper">
+    {# Determine blog id / source #}
+    {% set selected_blog = module.blog_id or group.id or "default" %}
+    {% set feat_post = null %}
+
+    {# 1. If Mode is custom and post_link has content_id, try content_by_id #}
+    {% if module.selection_mode == "custom" and module.post_link.content_id %}
+      {% set feat_post = content_by_id(module.post_link.content_id) %}
+    {% endif %}
+
+    {# 2. If Mode is latest, or custom selection failed/empty, fetch latest from selected blog #}
+    {% if not feat_post %}
+      {% set latest_posts = blog_recent_posts(selected_blog, 1) %}
+      {% if latest_posts|length > 0 %}
+        {% set feat_post = latest_posts[0] %}
+      {% endif %}
+    {% endif %}
+
+    {# Variables for card rendering with manual override support #}
+    {% set card_title = module.manual_override.title or (feat_post.name if feat_post else '') %}
+    {% set card_desc = module.manual_override.description or (feat_post.post_list_content|truncatehtml(300, '...', false)|striptags if feat_post else '') %}
+    {% set card_url = (module.post_link.url if module.post_link.url else (feat_post.absolute_url if feat_post else '#')) %}
+    {% set card_image = module.manual_override.image.src or (feat_post.featured_image if feat_post else '') %}
+    {% set raw_card_date = feat_post.publish_date ? feat_post.publish_date|datetimeformat('%b %d, %Y') : (feat_post.publish_date_localized if feat_post else '') %}
+    {% if raw_card_date and (":" in raw_card_date) and ("," in raw_card_date) %}
+      {% set date_parts = raw_card_date|split(',') %}
+      {% if date_parts|length >= 2 %}
+        {% set raw_card_date = date_parts[0] ~ "," ~ date_parts[1] %}
+      {% endif %}
+    {% endif %}
+    {% set card_date = raw_card_date %}
+    {% set card_tag = feat_post.topic_list[0].name if (feat_post and feat_post.topic_list|length > 0) else '' %}
+
+    {% if card_title or feat_post %}
+      <article class="featured-single-blog-card">
+        {# Left: Thumbnail Image #}
+        <div class="featured-single-blog-card__media">
+          <a href="{{ card_url }}" class="featured-single-blog-card__media-link" aria-label="{{ card_title|escape_attr }}">
+            {% if card_image %}
+              <img src="{{ resize_image_url(card_image|escape_url, 900) }}" 
+                   alt="{{ card_image_alt|escape_attr }}" 
+                   loading="lazy" 
+                   width="900" 
+                   height="580"
+                   class="featured-single-blog-card__img">
+            {% else %}
+              <div class="featured-single-blog-card__placeholder">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#B727F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+            {% endif %}
+          </a>
+
+          {% if card_tag %}
+            <div class="featured-single-blog-card__badge-wrap">
+              <span class="featured-single-blog-card__badge">{{ card_tag }}</span>
+            </div>
+          {% endif %}
+        </div>
+
+        {# Right: Content Area #}
+        <div class="featured-single-blog-card__content">
+          <div class="featured-single-blog-card__top">
+            {% if module.badge_text %}
+              <div class="featured-single-blog-card__feature-label">
+                <span>{{ module.badge_text }}</span>
+              </div>
+            {% endif %}
+
+            {% if card_date %}
+              <div class="featured-single-blog-card__meta">
+                <time datetime="{{ feat_post.publish_date ? feat_post.publish_date|datetimeformat('%Y-%m-%d') : card_date }}">{{ card_date }}</time>
+              </div>
+            {% endif %}
+          </div>
+
+          {# Title: Font 40px, Max 2 lines clamp #}
+          <h2 class="featured-single-blog-card__title">
+            <a href="{{ card_url }}" title="{{ card_title|escape_attr }}">
+              {{ card_title }}
+            </a>
+          </h2>
+
+          {# Description: Font 24px, Max 3 lines clamp #}
+          <div class="featured-single-blog-card__desc">
+            <p>{{ card_desc }}</p>
+          </div>
+
+          {# CTA Button #}
+          <div class="featured-single-blog-card__footer">
+            <a href="{{ card_url }}" class="featured-single-blog-card__cta">
+              <span>{{ module.cta_text or 'Read Full Story' }}</span>
+              <svg class="featured-single-blog-card__cta-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    {% else %}
+      <div class="featured-single-blog-empty">
+        <p>No blog post found. Please select a Blog source or select a post in the module settings.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>

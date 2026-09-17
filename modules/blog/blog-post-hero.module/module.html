@@ -1,0 +1,33 @@
+{% if module.show_section %}
+{% require_css %}
+    <style>
+        .blog-post-hero .scalable-banner__media {
+            background-image: url({{ resize_image_url(content.featured_image|escape_url, 1680 ) }});
+            background-blend-mode: {{ module.overlay_style.blend_style }};
+            background-color: {{ module.overlay_style.color.css }};
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .blog-post-hero .content-wrapper .content,
+        .blog-post-hero .content-wrapper .content h1 {
+            color: {{ module.overlay_style.text_color.css }};
+        }
+    </style>
+{% end_require_css %}
+
+<section class="blog-post-hero scalable-banner">
+    <div class="scalable-banner__media"></div>
+    <div class="content-wrapper" data-aos="fade" data-aos-duration="1200">
+        <div class="content">
+            <h1 class="h2">{{ content.name }}</h1>
+            {% if module.subtitle %}
+            <p class="big-text">
+                {{ module.subtitle }}
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}

@@ -1,0 +1,9 @@
+{
+  "global" : false,
+  "content_types" : [ "LANDING_PAGE", "SITE_PAGE", "BLOG_LISTING", "BLOG_POST" ],
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 467618256080,
+  "label" : "Header",
+  "icon" : "fontawesome-5.14.0:Bars:SOLID",
+  "is_available_for_new_content" : false
+}

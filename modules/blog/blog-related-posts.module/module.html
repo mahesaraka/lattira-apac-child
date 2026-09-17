@@ -1,0 +1,22 @@
+{% import '../../../macros/blog-cards.html' as macro %}
+
+{% if module.show_section %}
+<section class="blog-cards">
+    <div class="wrapper">
+        <div class="blog-cards__header">
+            <div class="h2">
+                {{ module.title }}
+            </div>
+            <a href="{{ group.absolute_url }}" class="primary-cta purple-cta">
+                {{ module.button_text }}
+            </a>
+        </div>
+        <div class="blog-cards__body grid grid-3">
+            {% set related_posts = blog_recent_tag_posts(group.id, content.topic_list[0].slug, 3) %}
+            {% for post in related_posts %}
+                {{ macro.blogCards(post, "", "{{ module.read_time }}") }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

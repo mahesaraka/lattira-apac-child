@@ -1,0 +1,131 @@
+[
+  {
+    "id": "show_section",
+    "name": "show_section",
+    "label": "Show Hero Section",
+    "required": false,
+    "locked": false,
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "id": "overlay_style",
+    "name": "overlay_style",
+    "label": "Overlay style",
+    "required": false,
+    "locked": false,
+    "children": [
+      {
+        "id": "color",
+        "name": "color",
+        "label": "Color",
+        "required": false,
+        "locked": false,
+        "show_opacity": true,
+        "type": "color",
+        "display_width": null,
+        "default": {
+          "color": "#321432",
+          "opacity": 60
+        }
+      },
+      {
+        "id": "text_color",
+        "name": "text_color",
+        "label": "Text color",
+        "required": false,
+        "locked": false,
+        "show_opacity": false,
+        "type": "color",
+        "display_width": null,
+        "default": {
+          "color": "#ffffff",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "blend_style",
+        "name": "blend_style",
+        "label": "Blend style",
+        "required": false,
+        "locked": false,
+        "display": "select",
+        "choices": [
+          [
+            "normal",
+            "Normal"
+          ],
+          [
+            "overlay",
+            "Overlay"
+          ],
+          [
+            "multiply",
+            "Multiply"
+          ],
+          [
+            "screen",
+            "Screen"
+          ],
+          [
+            "darken",
+            "Darken"
+          ],
+          [
+            "lighten",
+            "Lighten"
+          ],
+          [
+            "color-dodge",
+            "Color-dodge"
+          ],
+          [
+            "saturation",
+            "Saturation"
+          ],
+          [
+            "color",
+            "Color"
+          ],
+          [
+            "luminosity",
+            "Luminosity"
+          ]
+        ],
+        "multiple": false,
+        "reordering_enabled": true,
+        "preset": null,
+        "type": "choice",
+        "display_width": null,
+        "default": "overlay"
+      }
+    ],
+    "tab": "CONTENT",
+    "expanded": false,
+    "group_occurrence_meta": null,
+    "type": "group",
+    "display_width": null,
+    "default": {
+      "color": {
+        "color": "#321432",
+        "opacity": 60
+      },
+      "text_color": {
+        "color": "#ffffff",
+        "opacity": 100
+      },
+      "blend_style": "overlay"
+    }
+  },
+  {
+    "id": "subtitle",
+    "name": "subtitle",
+    "label": "Sub title",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "display_width": null,
+    "default": "We are used by top companies and organisations"
+  }
+]

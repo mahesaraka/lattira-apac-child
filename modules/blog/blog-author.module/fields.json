@@ -1,0 +1,22 @@
+[
+  {
+    "id": "show_section",
+    "name": "show_section",
+    "label": "Show Author Bar",
+    "required": false,
+    "locked": false,
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "id": "38c53cc5-ba80-35dd-ff5c-eab9b44af129",
+    "name": "written_by",
+    "label": "Written by",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "display_width": null,
+    "default": "Af"
+  }
+]

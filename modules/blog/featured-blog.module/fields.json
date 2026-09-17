@@ -1,0 +1,98 @@
+[
+  {
+    "id": "header_group",
+    "name": "header",
+    "label": "Header Settings",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "header_subtitle",
+        "name": "subtitle",
+        "label": "Subtitle / Badge",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Featured Articles"
+      },
+      {
+        "id": "header_title",
+        "name": "title",
+        "label": "Title",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Latest Insights & Stories"
+      },
+      {
+        "id": "header_alignment",
+        "name": "alignment",
+        "label": "Header Alignment",
+        "required": false,
+        "locked": false,
+        "type": "choice",
+        "choices": [
+          [ "left", "Left" ],
+          [ "center", "Center" ],
+          [ "right", "Right" ]
+        ],
+        "default": "left"
+      }
+    ]
+  },
+  {
+    "id": "source_group",
+    "name": "source",
+    "label": "Blog Source & Filter Settings",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "blog_source",
+        "name": "blog_id",
+        "label": "Select Blog (Source)",
+        "help_text": "Select which Blog to pull articles from. (Defaults to current blog if on blog template).",
+        "required": false,
+        "locked": false,
+        "type": "blog"
+      },
+      {
+        "id": "filter_tag",
+        "name": "tag",
+        "label": "Filter by Tag / Category (Slug)",
+        "help_text": "Leave blank to display latest posts from all categories. Enter tag slug (e.g. news, insight) to filter.",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": ""
+      },
+      {
+        "id": "filter_max_posts",
+        "name": "max_posts",
+        "label": "Maximum Posts (Up to 8)",
+        "required": false,
+        "locked": false,
+        "type": "number",
+        "min": 1,
+        "max": 8,
+        "step": 1,
+        "default": 8
+      },
+      {
+        "id": "filter_cta_text",
+        "name": "cta_text",
+        "label": "CTA Button Text",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Read Article"
+      }
+    ]
+  }
+]

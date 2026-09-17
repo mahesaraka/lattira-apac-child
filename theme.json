@@ -1,0 +1,26 @@
+{
+  "label": "lattira-apac-au-nz",
+  "preview_path": "./templates/home.html",
+  "screenshot_path": null,
+  "enable_domain_stylesheets": false,
+  "is_available_for_new_content": true,
+  "extends": "expertunity-theme-apac-au-nz",
+  "responsive_breakpoints": [
+    {
+      "mediaQuery": "@media (max-width: 767px)",
+      "messages": {},
+      "name": "mobile",
+      "previewWidth": {
+        "units": "px",
+        "value": 477
+      }
+    }
+  ],
+  "custom_fonts": [],
+  "version": "1.0",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "hide_all_default_modules": false
+}

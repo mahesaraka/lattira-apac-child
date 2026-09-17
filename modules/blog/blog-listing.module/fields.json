@@ -1,0 +1,104 @@
+[
+  {
+    "id": "header_group",
+    "name": "header",
+    "label": "Header Section",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "header_subtitle",
+        "name": "subtitle",
+        "label": "Subtitle / Badge",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Articles & Insights"
+      },
+      {
+        "id": "header_title",
+        "name": "title",
+        "label": "Title",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Explore Our Latest News"
+      },
+      {
+        "id": "header_description",
+        "name": "description",
+        "label": "Short Description",
+        "required": false,
+        "locked": false,
+        "type": "text",
+        "default": "Stay updated with the latest trends, insights, and innovations across the industry."
+      },
+      {
+        "id": "header_alignment",
+        "name": "alignment",
+        "label": "Alignment",
+        "required": false,
+        "locked": false,
+        "type": "choice",
+        "choices": [
+          [ "left", "Left" ],
+          [ "center", "Center" ],
+          [ "right", "Right" ]
+        ],
+        "default": "center"
+      }
+    ]
+  },
+  {
+    "id": "tags_group",
+    "name": "tags_settings",
+    "label": "Tags Filter Settings",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "show_tags",
+        "name": "show_tags",
+        "label": "Show Tags Filter",
+        "required": false,
+        "locked": false,
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "id": "all_tag",
+        "name": "all_tag",
+        "label": "All Tag Text",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "All Posts"
+      }
+    ]
+  },
+  {
+    "id": "cards_group",
+    "name": "cards_settings",
+    "label": "Cards Settings",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "read_more_text",
+        "name": "read_more_text",
+        "label": "CTA Button Text",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": "Read Article"
+      }
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "header_desktop_logo",
+    "label": "Override: Header Desktop Logo",
+    "required": false,
+    "locked": false,
+    "responsive": true,
+    "resizable": false,
+    "show_loading": false,
+    "type": "image",
+    "default": {
+      "src": "",
+      "alt": "",
+      "loading": "lazy"
+    }
+  },
+  {
+    "name": "header_sticky_logo",
+    "label": "Override: Header Sticky (Mobile) Logo",
+    "required": false,
+    "locked": false,
+    "responsive": true,
+    "resizable": false,
+    "show_loading": false,
+    "type": "image",
+    "default": {
+      "src": "",
+      "alt": "",
+      "loading": "lazy"
+    }
+  },
+  {
+    "name": "header_logo_link",
+    "label": "Override: Header Logo URL",
+    "required": false,
+    "locked": false,
+    "supported_types": [
+      "EXTERNAL",
+      "CONTENT",
+      "FILE",
+      "EMAIL_ADDRESS",
+      "BLOG"
+    ],
+    "type": "url",
+    "default": {
+      "content_id": null,
+      "href": "",
+      "type": "EXTERNAL"
+    }
+  },
+  {
+    "name": "footer_logo",
+    "label": "Override: Footer Logo",
+    "required": false,
+    "locked": false,
+    "responsive": true,
+    "resizable": false,
+    "show_loading": false,
+    "type": "image",
+    "default": {
+      "src": "",
+      "alt": "",
+      "loading": "lazy"
+    }
+  },
+  {
+    "name": "footer_logo_link",
+    "label": "Override: Footer Logo URL",
+    "required": false,
+    "locked": false,
+    "supported_types": [
+      "EXTERNAL",
+      "CONTENT",
+      "FILE",
+      "EMAIL_ADDRESS",
+      "BLOG"
+    ],
+    "type": "url",
+    "default": {
+      "content_id": null,
+      "href": "",
+      "type": "EXTERNAL"
+    }
+  },
+  {
+    "name": "override_pill_toggle",
+    "label": "Override: Header Pill Toggle Active State",
+    "required": false,
+    "locked": false,
+    "display": "select",
+    "type": "choice",
+    "choices": [
+      [
+        "none",
+        "Auto / Default (No Override)"
+      ],
+      [
+        "inactive",
+        "Force Both Inactive / No Purple"
+      ],
+      [
+        "pill_1",
+        "Force Pill 1 Active (Spec)"
+      ],
+      [
+        "pill_2",
+        "Force Pill 2 Active (Source)"
+      ]
+    ],
+    "default": "none"
+  }
+]

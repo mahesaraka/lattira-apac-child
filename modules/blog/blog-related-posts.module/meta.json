@@ -1,0 +1,14 @@
+{
+  "global": false,
+  "content_types": [
+    "BLOG_POST"
+  ],
+  "smart_type": "NOT_SMART",
+  "host_template_types": [
+    "BLOG_POST"
+  ],
+  "module_id": 467618256071,
+  "label": "Blog Related Posts",
+  "icon": "fontawesome-5.14.0:quote-left:SOLID",
+  "is_available_for_new_content": false
+}

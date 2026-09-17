@@ -1,0 +1,15 @@
+{
+  "global": false,
+  "content_types": [
+    "LANDING_PAGE",
+    "SITE_PAGE",
+    "BLOG_POST"
+  ],
+  "host_template_types": [
+    "PAGE",
+    "BLOG_LISTING",
+    "BLOG_POST"
+  ],
+  "label": "[C] Card Content",
+  "is_available_for_new_content": true
+}

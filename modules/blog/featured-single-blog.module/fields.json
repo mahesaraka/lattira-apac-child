@@ -1,0 +1,99 @@
+[
+  {
+    "id": "selection_mode",
+    "name": "selection_mode",
+    "label": "Post Selection Mode",
+    "required": false,
+    "locked": false,
+    "type": "choice",
+    "choices": [
+      [ "latest", "Latest Post Automatically" ],
+      [ "custom", "Select Specific Post" ]
+    ],
+    "default": "latest"
+  },
+  {
+    "id": "blog_source",
+    "name": "blog_id",
+    "label": "Select Blog (Source)",
+    "help_text": "Choose which Blog to pull the latest article from (defaults to current blog if on blog page).",
+    "required": false,
+    "locked": false,
+    "type": "blog"
+  },
+  {
+    "id": "selected_post_link",
+    "name": "post_link",
+    "label": "Select Specific Post",
+    "help_text": "If Mode is 'Select Specific Post', select the article here (Supports blog posts, pages, or URLs).",
+    "required": false,
+    "locked": false,
+    "type": "link",
+    "supported_types": [
+      "BLOG",
+      "CONTENT",
+      "EXTERNAL"
+    ]
+  },
+  {
+    "id": "manual_override_group",
+    "name": "manual_override",
+    "label": "Custom Card Details (Optional Override)",
+    "help_text": "Fill in these fields only if you want to manually customize the image, title, or description.",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "custom_title",
+        "name": "title",
+        "label": "Custom Title",
+        "help_text": "Overrides post title (Leave empty to use original post title)",
+        "required": false,
+        "locked": false,
+        "allow_new_line": false,
+        "type": "text",
+        "default": ""
+      },
+      {
+        "id": "custom_desc",
+        "name": "description",
+        "label": "Custom Description",
+        "help_text": "Overrides post summary (Leave empty to use original post summary)",
+        "required": false,
+        "locked": false,
+        "type": "text",
+        "default": ""
+      },
+      {
+        "id": "custom_image",
+        "name": "image",
+        "label": "Custom Thumbnail Image",
+        "help_text": "Overrides post featured image (Leave empty to use original post image)",
+        "required": false,
+        "locked": false,
+        "type": "image"
+      }
+    ]
+  },
+  {
+    "id": "badge_text",
+    "name": "badge_text",
+    "label": "Section Badge / Label",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "default": "Featured Story"
+  },
+  {
+    "id": "cta_text",
+    "name": "cta_text",
+    "label": "CTA Button Text",
+    "required": false,
+    "locked": false,
+    "allow_new_line": false,
+    "type": "text",
+    "default": "Read Full Story"
+  }
+]

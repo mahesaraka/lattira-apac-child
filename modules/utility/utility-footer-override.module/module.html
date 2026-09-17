@@ -1,0 +1,169 @@
+<style>
+  /* Hide the global default footer when this Footer Override module is on the page */
+  footer.footer:not(.footer-override),
+  .footer:not(.footer-override),
+  #hs_cos_wrapper_module_new_lattira_global_footer,
+  #hs_cos_wrapper_module_17466224462196,
+  div:has(> footer.footer:not(.footer-override)),
+  div:has(> #hs_cos_wrapper_module_new_lattira_global_footer),
+  div:has(> #hs_cos_wrapper_module_17466224462196),
+  [data-global-resource-path*="footer"]:not(:has(.footer-override)) {
+    display: none !important;
+  }
+
+  /* Make parent section and its D&D wrappers completely full-width with 0 padding */
+  .dnd-section:has(.footer-override),
+  .override-section-fullwidth {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .dnd-section:has(.footer-override) > .row-fluid,
+  .override-section-fullwidth > .row-fluid,
+  .dnd-section:has(.footer-override) .dnd-column,
+  .override-section-fullwidth .dnd-column,
+  .dnd-section:has(.footer-override) .dnd-row,
+  .override-section-fullwidth .dnd-row,
+  .dnd-section:has(.footer-override) .dnd-module,
+  .override-section-fullwidth .dnd-module,
+  .dnd-section:has(.footer-override) .hs_cos_wrapper_type_module,
+  .override-section-fullwidth .hs_cos_wrapper_type_module {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .footer.footer-override {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+</style>
+
+{% require_js %}
+<script>
+  (function() {
+    function setupFooterOverride() {
+      // 1. Hide the global default footer
+      var globalFooters = document.querySelectorAll('footer.footer:not(.footer-override), #hs_cos_wrapper_module_new_lattira_global_footer, #hs_cos_wrapper_module_17466224462196');
+      for (var i = 0; i < globalFooters.length; i++) {
+        globalFooters[i].style.display = 'none';
+        var partial = globalFooters[i].closest('.hs_cos_wrapper_global_partial');
+        if (partial) {
+          partial.style.display = 'none';
+        }
+      }
+
+      // 2. Remove dnd-section class and make parent section full-width
+      var footer = document.getElementById('footer-override-{{ name }}');
+      if (footer) {
+        var parentSection = footer.closest('.dnd-section');
+        if (parentSection) {
+          parentSection.classList.remove('dnd-section');
+          parentSection.classList.add('override-section-fullwidth');
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupFooterOverride);
+    } else {
+      setupFooterOverride();
+    }
+  })();
+</script>
+{% end_require_js %}
+
+{% from "expertunity-theme-apac-au-nz/macros/links.html" import linkWrapper %}
+
+<footer id="footer-override-{{ name }}" class="footer footer-override">
+    <div class="content-wrapper">
+        <div class="footer__body">
+            <div class="footer__logo">
+                <a href="{{ module.logo.url.href }}" class="cover-link"></a>
+                <img src="{{ module.logo.image.src }}" alt="{{ module.logo.image.alt }}" />
+            </div>
+            <div class="footer__columns">
+                {% for column in module.columns %}
+                    <div class="footer__column">
+                        <div class="footer__column-title">
+                            <h5>{{ column.title }}</h5>
+                        </div>
+                        <div class="footer__column-body">
+                        {% for menu in column.menus %}
+                            <nav>
+                                {% simple_menu menu_tree="{{ menu }}" %}
+                            </nav>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="footer__column footer__column--links">
+                    <div class="footer__column-ctas">
+                        {% for cta in module.ctas %}
+                            {% if cta.cta_settings.cta_type == 'cta' %} 
+                                {% cta guid="{{cta.cta_settings.cta_field }}" %} 
+                            {% else %}
+                                {% set href = cta.cta_settings.button_settings.button_url.url.href %}
+                                {% if cta.cta_settings.button_settings.button_url.url.type is equalto "EMAIL_ADDRESS" %}
+                                    {% set href = "mailto:" + href %}
+                                {% elif cta.cta_settings.button_settings.button_url.url.type is equalto "PHONE_NUMBER" %}
+                                    {% set href = "tel:" + href %}
+                                {% endif %}
+                            
+                                <a
+                                {% if cta.cta_settings.button_settings.button_url.url.type is equalto "CALL_TO_ACTION"  %}
+                                    href="{{ href }}" {# The href here is not escaped as it is not editable and functions as a JavaScript call to the associated CTA #}
+                                {% else %}
+                                    href="{{ href|escape_url }}"
+                                {% endif %}
+                                {% if cta.cta_settings.button_settings.button_url.open_in_new_tab %}
+                                    target="_blank"
+                                {% endif %}
+                                {% if cta.cta_settings.button_settings.button_url.rel %}
+                                    rel="{{ cta.cta_settings.button_settings.button_url.rel|escape_attr }}"
+                                {% endif %}
+                                class="{{ cta.cta_settings.button_settings.button_type }} {{ cta.cta_settings.button_settings.button_colour }}" aria-label="{{ cta.cta_settings.button_settings.button_text }}"
+                                >   
+                                {{ cta.cta_settings.button_settings.button_text }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="footer__socials">
+                    {% for link in module.links %}
+                        <div class="footer__social-icon">
+                            {% call linkWrapper(link, "cover-link", "some link") %}
+                            {% endcall %}
+                            {% if (link.icon_type == 'image' or (!link.icon.name and link.image.src)) and link.image.src %}
+                                <img src="{{ link.image.src }}" alt="{{ link.image.alt|default('icon') }}" class="footer__social-img" loading="lazy" />
+                            {% else %}
+                                {% icon
+                                    name="{{ link.icon.name }}"
+                                    style="{{ link.icon.type }}"
+                                    unicode="{{ link.icon.unicode }}"
+                                    icon_set="{{ link.icon.icon_set }}"
+                                %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer__lower">
+            <div class="tagline">
+                <p>{{ module.lower_footer.tagline }}</p>
+            </div>
+            <div class="footer__column footer__column--policies">
+                <p>&copy; {{ module.lower_footer.copywrite_notice }}</p>
+                <nav>
+                    {% simple_menu menu_tree="{{ module.lower_footer.menu }}" %}
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</footer>

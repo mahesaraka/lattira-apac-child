@@ -1,0 +1,183 @@
+<!--
+  templateType: none
+-->
+<!DOCTYPE html>
+<html lang="{{ html_lang }}" {{ html_lang_dir }} class="template_{{ template_meta.label|cut(" .html") }}">
+
+<head>
+  <meta charset="utf-8" />
+  {% if page_meta.html_title %}
+  <title>{{ page_meta.html_title }}</title>
+  {% endif %}
+  {% if brand_settings.primary_favicon.src %}
+  <link rel="shortcut icon" href="{{ brand_settings.primary_favicon.src }}" />
+  {% endif %}
+
+  <meta name="description" content="{{ page_meta.meta_description }}" />
+
+  {{ require_css(get_asset_url("../../css/main.css")) }}
+
+  {% if template_css %}
+  {{ require_css(get_asset_url(template_css)) }}
+  {% endif %}
+  {{ require_css(get_asset_url("../../css/theme-overrides.css")) }}
+  {{ require_js(get_asset_url("../../child.js")) }}
+  {{ standard_header_includes }}
+  {% if theme.favicon.src %}
+  <link rel="shortcut icon" href="{{ theme.favicon.src|escape_url }}" />
+  {% endif %}
+  <link rel="stylesheet" href="{{ get_asset_url('../../child.css') }}">
+  <style>
+    /* HubexoProductFont */
+    @font-face {
+      font-family: 'HubexoProductFont';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/hubexo-font-woff-woff2/HubexoProductFont-Regular.woff') }}") format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'HubexoProductFont';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/hubexo-font-woff-woff2/HubexoProductFont-RegularItalic.woff') }}") format('woff');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'HubexoProductFont';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/hubexo-font-woff-woff2/HubexoProductFont-Bold.woff') }}") format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* Bauziet */
+    @font-face {
+      font-family: 'Bauziet';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/bauziet/BauzietRegular/font.woff') }}") format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Bauziet';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/bauziet/BauzietMedium/font.woff') }}") format('woff');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Bauziet';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/bauziet/BauzietSemibold/font.woff') }}") format('woff');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Bauziet';
+      src: url("{{ get_asset_url('/expertunity-theme-apac-au-nz/fonts/bauziet/BauzietBold/font.woff') }}") format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* Force HubexoProductFont on all elements */
+    body,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    a,
+    li,
+    span,
+    div,
+    button,
+    input,
+    textarea,
+    select {
+      font-family: 'HubexoProductFont', sans-serif !important;
+      line-height: normal;
+    }
+  </style>
+
+  {% if !is_in_editor %}
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  {% endif %}
+
+  {{ require_css(get_asset_url("../../css/julian-child.css")) }}
+
+</head>
+
+<body>
+
+  {# ======== Redirection Script, if country code and lang exist in the "Language Associations" table and language
+  variant of the page is available. ======== #}
+  {% set country_map = [] %}
+  {% for row in hubdb_table_rows(677104855) %}
+  {% for t in content.translated_content %}
+  {% if t.language == row.language_code %}
+  {% set translated_page = t.absolute_url %}
+  {% do country_map.append({
+  "country": row.country_code,
+  "language": row.language_code,
+  "translated_page": translated_page
+  }) %}
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+
+  {% for country in country_map %}
+  {% if (country.country == request.country) and ( content.language != country.language ) %}
+  <script>
+    window.location = "{{ country.translated_page }}";
+  </script>
+  {% endif %}
+  {% endfor %}
+  {# ======== End Redirection Script ======== #}
+
+  <div class="body-wrapper {{ builtin_body_classes }}">
+    {% block header %}
+    {% global_partial
+    path="../partials/header.html" %}
+    {% endblock header %}
+
+    <main id="main-content">
+      {% block body %}
+      {% endblock body %}
+    </main>
+
+    {% block footer %}
+    {% global_partial
+    path="../partials/footer.html" %}
+    {% endblock footer %}
+  </div>
+
+  <div class="overlay hidden"></div>
+
+  <script src="{{ get_asset_url('/expertunity-theme-apac-au-nz/js/helpers.js') }}"></script>
+
+  {% if template_js %}
+  {{ require_js(get_asset_url(template_js)) }}
+  {% endif %}
+
+  {{ standard_footer_includes }}
+  <script>
+
+  </script>
+  {% if !is_in_editor %}
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  {% endif %}
+</body>
+
+</html>

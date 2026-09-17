@@ -1,0 +1,12 @@
+{% if module.show_section %}
+<section class="blog-post-author">
+  <div class="wrapper">
+    <div class="author">
+      {{ module.written_by }} {{ content.blog_post_author.display_name }}
+    </div>
+    <div class="date">
+      {{ content.publish_date|datetimeformat('%d/%m/%Y') }}
+    </div>
+  </div>
+</section>
+{% endif %}

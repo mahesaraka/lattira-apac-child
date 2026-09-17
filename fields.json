@@ -1,0 +1,2661 @@
+[
+    {
+        "label": "Colors",
+        "name": "colors",
+        "type": "group",
+        "children": [
+            {
+                "label": "Primary",
+                "name": "primary",
+                "type": "color",
+                "visibility": {
+                    "hidden_subfields": {
+                        "opacity": true
+                    }
+                },
+                "display_width": null,
+                "locked": false,
+                "required": false,
+                "inherited_value": {
+                    "property_value_paths": {
+                        "color": "brandSettings.primaryColor"
+                    }
+                },
+                "default": {
+                    "color": "#321432",
+                    "opacity": 100
+                }
+            },
+            {
+                "label": "Secondary",
+                "name": "secondary",
+                "type": "color",
+                "visibility": {
+                    "hidden_subfields": {
+                        "opacity": true
+                    }
+                },
+                "display_width": null,
+                "locked": false,
+                "required": false,
+                "inherited_value": {
+                    "property_value_paths": {
+                        "color": "brandSettings.colors[1]"
+                    }
+                },
+                "default": {
+                    "color": "#FF4A1F",
+                    "opacity": 100
+                }
+            },
+            {
+                "label": "Accent 1",
+                "name": "accent_one",
+                "type": "color",
+                "visibility": {
+                    "hidden_subfields": {
+                        "opacity": true
+                    }
+                },
+                "display_width": null,
+                "locked": false,
+                "required": false,
+                "inherited_value": {
+                    "property_value_paths": {
+                        "color": "brandSettings.colors[2]"
+                    }
+                },
+                "default": {
+                    "color": "#C8D2D2",
+                    "opacity": 100
+                }
+            },
+            {
+                "label": "Accent 2",
+                "name": "accent_two",
+                "type": "color",
+                "visibility": {
+                    "hidden_subfields": {
+                        "opacity": true
+                    }
+                },
+                "display_width": null,
+                "locked": false,
+                "required": false,
+                "inherited_value": {
+                    "property_value_paths": {
+                        "color": "brandSettings.colors[3]"
+                    }
+                },
+                "default": {
+                    "color": "#EEEEEE",
+                    "opacity": 100
+                }
+            }
+        ],
+        "display_width": null,
+        "expanded": false,
+        "group_occurrence_meta": null,
+        "locked": false,
+        "required": false,
+        "tab": "CONTENT",
+        "default": {
+            "accent_one": {
+                "color": "#C8D2D2",
+                "opacity": 100
+            },
+            "accent_two": {
+                "color": "#EEEEEE",
+                "opacity": 100
+            },
+            "primary": {
+                "color": "#321432",
+                "opacity": 100
+            },
+            "secondary": {
+                "color": "#FF4A1F",
+                "opacity": 100
+            }
+        }
+    },
+    {
+        "label": "Fonts",
+        "name": "fonts",
+        "type": "group",
+        "children": [
+            {
+                "label": "Primary",
+                "name": "primary",
+                "type": "font",
+                "visibility": {
+                    "hidden_subfields": {
+                        "bold": true,
+                        "italic": true,
+                        "size": true,
+                        "underline": true
+                    }
+                },
+                "display_width": null,
+                "load_external_fonts": true,
+                "locked": false,
+                "required": false,
+                "default": {
+                    "color": "#321432",
+                    "fallback": "Helvetica, sans-serif",
+                    "font": "HubexoProductFont",
+                    "font_set": "CUSTOM",
+                    "styles": {
+                        "font-weight": 500
+                    },
+                    "variant": "Medium"
+                }
+            },
+            {
+                "label": "Secondary",
+                "name": "secondary",
+                "type": "font",
+                "visibility": {
+                    "hidden_subfields": {
+                        "bold": true,
+                        "italic": true,
+                        "size": true,
+                        "underline": true
+                    }
+                },
+                "display_width": null,
+                "load_external_fonts": true,
+                "locked": false,
+                "required": false,
+                "default": {
+                    "color": "#321432",
+                    "fallback": "Helvetica, sans-serif",
+                    "font": "HubexoProductFont",
+                    "font_set": "CUSTOM",
+                    "styles": {
+                        "font-weight": 500
+                    },
+                    "variant": "Bold"
+                }
+            },
+            {
+                "label": "Text desktop",
+                "name": "text_desktop",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Heading one (H1)",
+                        "name": "h1",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#321432",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "HubexoProductFont",
+                                    "font_set": "CUSTOM",
+                                    "size": 110,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#321432",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "HubexoProductFont",
+                                "font_set": "CUSTOM",
+                                "size": 110,
+                                "size_unit": "px",
+                                "variant": "Semibold"
+                            },
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Heading two (H2)",
+                        "name": "h2",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#321432",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "HubexoProductFont",
+                                    "font_set": "CUSTOM",
+                                    "size": 60,
+                                    "size_unit": "px",
+                                    "variant": "Bold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#321432",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "HubexoProductFont",
+                                "font_set": "CUSTOM",
+                                "size": 60,
+                                "size_unit": "px",
+                                "variant": "Bold"
+                            },
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Heading three (H3)",
+                        "name": "h3",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#321432",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "HubexoProductFont",
+                                    "font_set": "CUSTOM",
+                                    "size": 34,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#321432",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "HubexoProductFont",
+                                "font_set": "CUSTOM",
+                                "size": 34,
+                                "size_unit": "px",
+                                "variant": "Semibold"
+                            },
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Heading four (H4)",
+                        "name": "h4",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 24,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Heading five (H5)",
+                        "name": "h5",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 20,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Heading six (H6)",
+                        "name": "h6",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 16,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "lineheight": 1
+                        }
+                    },
+                    {
+                        "label": "Body",
+                        "name": "body_font",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "bold": true,
+                                        "italic": true,
+                                        "underline": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.primary.color",
+                                        "fallback": "theme.fonts.primary.fallback",
+                                        "font": "theme.fonts.primary.font",
+                                        "font_set": "theme.fonts.primary.font_set",
+                                        "variant": "theme.fonts.primary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#321432",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "HubexoProductFont",
+                                    "font_set": "CUSTOM",
+                                    "size": 20,
+                                    "size_unit": "px",
+                                    "variant": "Medium"
+                                }
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1.5
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#321432",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "HubexoProductFont",
+                                "font_set": "CUSTOM",
+                                "size": 20,
+                                "size_unit": "px",
+                                "variant": "Medium"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Links",
+                        "name": "links",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "size": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "styles": {
+                                        "text-decoration": "none"
+                                    },
+                                    "variant": "Regular"
+                                }
+                            },
+                            {
+                                "label": "Hover font",
+                                "name": "hover_font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "size": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "styles": {
+                                        "text-decoration": "underline"
+                                    },
+                                    "variant": "Regular"
+                                }
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "styles": {
+                                    "text-decoration": "none"
+                                },
+                                "variant": "Regular"
+                            },
+                            "hover_font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "styles": {
+                                    "text-decoration": "underline"
+                                },
+                                "variant": "Regular"
+                            }
+                        }
+                    }
+                ],
+                "display_width": null,
+                "expanded": false,
+                "group_occurrence_meta": null,
+                "locked": false,
+                "required": false,
+                "tab": "CONTENT",
+                "default": {
+                    "body_font": {
+                        "font": {
+                            "color": "#321432",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "HubexoProductFont",
+                            "font_set": "CUSTOM",
+                            "size": 20,
+                            "size_unit": "px",
+                            "variant": "Medium"
+                        }
+                    },
+                    "h1": {
+                        "font": {
+                            "color": "#321432",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "HubexoProductFont",
+                            "font_set": "CUSTOM",
+                            "size": 110,
+                            "size_unit": "px",
+                            "variant": "Semibold"
+                        },
+                        "lineheight": 1
+                    },
+                    "h2": {
+                        "font": {
+                            "color": "#321432",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "HubexoProductFont",
+                            "font_set": "CUSTOM",
+                            "size": 60,
+                            "size_unit": "px",
+                            "variant": "Bold"
+                        },
+                        "lineheight": 1
+                    },
+                    "h3": {
+                        "font": {
+                            "color": "#321432",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "HubexoProductFont",
+                            "font_set": "CUSTOM",
+                            "size": 34,
+                            "size_unit": "px",
+                            "variant": "Semibold"
+                        },
+                        "lineheight": 1
+                    },
+                    "h4": {
+                        "lineheight": 1
+                    },
+                    "h5": {
+                        "lineheight": 1
+                    },
+                    "h6": {
+                        "lineheight": 1
+                    }
+                }
+            },
+            {
+                "label": "Text mobile",
+                "name": "text_mobile",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Heading one (H1)",
+                        "name": "h1",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 50,
+                                    "size_unit": "px",
+                                    "variant": "Extra Bold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1.1
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 50,
+                                "size_unit": "px",
+                                "variant": "Extra Bold"
+                            },
+                            "lineheight": 1.1
+                        }
+                    },
+                    {
+                        "label": "Heading two (H2)",
+                        "name": "h2",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 32,
+                                    "size_unit": "px",
+                                    "variant": "Bold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1.2
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 32,
+                                "size_unit": "px",
+                                "variant": "Bold"
+                            },
+                            "lineheight": 1.2
+                        }
+                    },
+                    {
+                        "label": "Heading three (H3)",
+                        "name": "h3",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 26,
+                                    "size_unit": "px",
+                                    "variant": "Bold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1.2
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 26,
+                                "size_unit": "px",
+                                "variant": "Bold"
+                            },
+                            "lineheight": 1.2
+                        }
+                    },
+                    {
+                        "label": "Heading four (H4)",
+                        "name": "h4",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 24,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": "1.3"
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 24,
+                                "size_unit": "px",
+                                "variant": "Semibold"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Heading five (H5)",
+                        "name": "h5",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 20,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": "1.3"
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 20,
+                                "size_unit": "px",
+                                "variant": "Semibold"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Heading six (H6)",
+                        "name": "h6",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.secondary.color",
+                                        "fallback": "theme.fonts.secondary.fallback",
+                                        "font": "theme.fonts.secondary.font",
+                                        "font_set": "theme.fonts.secondary.font_set",
+                                        "variant": "theme.fonts.secondary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#231f20",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "size": 16,
+                                    "size_unit": "px",
+                                    "variant": "Semibold"
+                                }
+                            },
+                            {
+                                "label": "Transform",
+                                "name": "transform",
+                                "type": "choice",
+                                "choices": [
+                                    [
+                                        "none",
+                                        "None"
+                                    ],
+                                    [
+                                        "capitalize",
+                                        "Capitalize"
+                                    ],
+                                    [
+                                        "uppercase",
+                                        "Uppercase"
+                                    ],
+                                    [
+                                        "lowercase",
+                                        "Lowercase"
+                                    ]
+                                ],
+                                "display": "select",
+                                "display_width": null,
+                                "locked": false,
+                                "multiple": false,
+                                "preset": null,
+                                "reordering_enabled": true,
+                                "required": false,
+                                "default": "none"
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": "1.3"
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "font": {
+                                "color": "#231f20",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "size": 16,
+                                "size_unit": "px",
+                                "variant": "Semibold"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Body",
+                        "name": "body_font",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "bold": true,
+                                        "italic": true,
+                                        "underline": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.fonts.primary.color",
+                                        "fallback": "theme.fonts.primary.fallback",
+                                        "font": "theme.fonts.primary.font",
+                                        "font_set": "theme.fonts.primary.font_set",
+                                        "variant": "theme.fonts.primary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "size": 16,
+                                    "size_unit": "px"
+                                }
+                            },
+                            {
+                                "label": "Line height",
+                                "name": "lineheight",
+                                "type": "number",
+                                "display": "text",
+                                "display_width": null,
+                                "locked": false,
+                                "max": 3,
+                                "min": 0.5,
+                                "required": false,
+                                "step": 0.01,
+                                "default": 1.5
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "lineheight": 1.5
+                        }
+                    },
+                    {
+                        "label": "Links",
+                        "name": "links",
+                        "type": "group",
+                        "children": [
+                            {
+                                "label": "Font",
+                                "name": "font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "size": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "color": "theme.colors.primary.color",
+                                        "fallback": "theme.fonts.primary.fallback",
+                                        "font": "theme.fonts.primary.font",
+                                        "font_set": "theme.fonts.primary.font_set",
+                                        "variant": "theme.fonts.primary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "styles": {
+                                        "text-decoration": "underline"
+                                    },
+                                    "color": "#008d7f",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "variant": "Regular"
+                                }
+                            },
+                            {
+                                "label": "Hover font",
+                                "name": "hover_font",
+                                "type": "font",
+                                "visibility": {
+                                    "hidden_subfields": {
+                                        "size": true
+                                    }
+                                },
+                                "display_width": null,
+                                "load_external_fonts": true,
+                                "locked": false,
+                                "required": false,
+                                "inherited_value": {
+                                    "property_value_paths": {
+                                        "fallback": "theme.fonts.primary.fallback",
+                                        "font": "theme.fonts.primary.font",
+                                        "font_set": "theme.fonts.primary.font_set",
+                                        "variant": "theme.fonts.primary.variant"
+                                    }
+                                },
+                                "default": {
+                                    "color": "#003934",
+                                    "fallback": "Helvetica, sans-serif",
+                                    "font": "Barlow",
+                                    "font_set": "CUSTOM",
+                                    "styles": {
+                                        "text-decoration": "underline"
+                                    },
+                                    "variant": "Regular"
+                                }
+                            }
+                        ],
+                        "display_width": null,
+                        "expanded": false,
+                        "group_occurrence_meta": null,
+                        "locked": false,
+                        "required": false,
+                        "tab": "CONTENT",
+                        "default": {
+                            "hover_font": {
+                                "color": "#003934",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "styles": {
+                                    "text-decoration": "underline"
+                                },
+                                "variant": "Regular"
+                            },
+                            "font": {
+                                "styles": {
+                                    "text-decoration": "underline"
+                                },
+                                "color": "#008d7f",
+                                "fallback": "Helvetica, sans-serif",
+                                "font": "Barlow",
+                                "font_set": "CUSTOM",
+                                "variant": "Regular"
+                            }
+                        }
+                    }
+                ],
+                "display_width": null,
+                "expanded": false,
+                "group_occurrence_meta": null,
+                "locked": false,
+                "required": false,
+                "tab": "CONTENT",
+                "default": {
+                    "body_font": {
+                        "lineheight": 1.5
+                    },
+                    "h1": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 50,
+                            "size_unit": "px",
+                            "variant": "Extra Bold"
+                        },
+                        "lineheight": 1.1
+                    },
+                    "h2": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 32,
+                            "size_unit": "px",
+                            "variant": "Bold"
+                        },
+                        "lineheight": 1.2
+                    },
+                    "h3": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 26,
+                            "size_unit": "px",
+                            "variant": "Bold"
+                        },
+                        "lineheight": 1.2
+                    },
+                    "h4": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 24,
+                            "size_unit": "px",
+                            "variant": "Semibold"
+                        }
+                    },
+                    "h5": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 20,
+                            "size_unit": "px",
+                            "variant": "Semibold"
+                        }
+                    },
+                    "h6": {
+                        "font": {
+                            "color": "#231f20",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "size": 16,
+                            "size_unit": "px",
+                            "variant": "Semibold"
+                        }
+                    },
+                    "links": {
+                        "hover_font": {
+                            "color": "#003934",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "styles": {
+                                "text-decoration": "underline"
+                            },
+                            "variant": "Regular"
+                        },
+                        "font": {
+                            "styles": {
+                                "text-decoration": "underline"
+                            },
+                            "color": "#008d7f",
+                            "fallback": "Helvetica, sans-serif",
+                            "font": "Barlow",
+                            "font_set": "CUSTOM",
+                            "variant": "Regular"
+                        }
+                    }
+                }
+            }
+        ],
+        "display_width": null,
+        "expanded": false,
+        "group_occurrence_meta": null,
+        "locked": false,
+        "required": false,
+        "tab": "CONTENT",
+        "default": {
+            "primary": {
+                "color": "#321432",
+                "fallback": "Helvetica, sans-serif",
+                "font": "HubexoProductFont",
+                "font_set": "CUSTOM",
+                "styles": {
+                    "font-weight": 500
+                },
+                "variant": "Medium"
+            },
+            "secondary": {
+                "color": "#321432",
+                "fallback": "Helvetica, sans-serif",
+                "font": "HubexoProductFont",
+                "font_set": "CUSTOM",
+                "styles": {
+                    "font-weight": 500
+                },
+                "variant": "Bold"
+            },
+            "text_desktop": {
+                "body_font": {
+                    "font": {
+                        "color": "#321432",
+                        "fallback": "Helvetica, sans-serif",
+                        "font": "HubexoProductFont",
+                        "font_set": "CUSTOM",
+                        "size": 20,
+                        "size_unit": "px",
+                        "variant": "Medium"
+                    }
+                },
+                "h1": {
+                    "font": {
+                        "color": "#321432",
+                        "fallback": "Helvetica, sans-serif",
+                        "font": "HubexoProductFont",
+                        "font_set": "CUSTOM",
+                        "size": 110,
+                        "size_unit": "px",
+                        "variant": "Semibold"
+                    },
+                    "lineheight": 1
+                },
+                "h2": {
+                    "font": {
+                        "color": "#321432",
+                        "fallback": "Helvetica, sans-serif",
+                        "font": "HubexoProductFont",
+                        "font_set": "CUSTOM",
+                        "size": 60,
+                        "size_unit": "px",
+                        "variant": "Bold"
+                    },
+                    "lineheight": 1
+                },
+                "h3": {
+                    "font": {
+                        "color": "#321432",
+                        "fallback": "Helvetica, sans-serif",
+                        "font": "HubexoProductFont",
+                        "font_set": "CUSTOM",
+                        "size": 34,
+                        "size_unit": "px",
+                        "variant": "Semibold"
+                    },
+                    "lineheight": 1
+                },
+                "h4": {
+                    "lineheight": 1
+                },
+                "h5": {
+                    "lineheight": 1
+                },
+                "h6": {
+                    "lineheight": 1
+                }
+            }
+        }
+    },
+    {
+        "label": "Spacing",
+        "name": "spacing",
+        "type": "group",
+        "children": [
+            {
+                "label": "Maximum content width",
+                "name": "maximum_content_width",
+                "id": "maximum_content_width",
+                "type": "choice",
+                "choices": [
+                    [
+                        "compact",
+                        "Compact (900px)"
+                    ],
+                    [
+                        "default",
+                        "Default (1000px)"
+                    ],
+                    [
+                        "comfortable",
+                        "Comfortable (1200px)"
+                    ],
+                    [
+                        "custom",
+                        "Custom"
+                    ]
+                ],
+                "display": "select",
+                "display_width": null,
+                "locked": false,
+                "multiple": false,
+                "preset": null,
+                "reordering_enabled": true,
+                "required": false,
+                "default": "custom"
+            },
+            {
+                "label": "Custom maximum content width",
+                "name": "custom_maximum_content_width",
+                "type": "number",
+                "visibility": {
+                    "controlling_field": "maximum_content_width",
+                    "controlling_value_regex": "custom",
+                    "operator": "EQUAL"
+                },
+                "display": "slider",
+                "display_width": null,
+                "locked": false,
+                "max": 1680,
+                "min": 700,
+                "required": false,
+                "step": 10,
+                "suffix": "px",
+                "default": 1400
+            },
+            {
+                "label": "Vertical spacing",
+                "name": "vertical_spacing",
+                "id": "vertical_spacing",
+                "type": "choice",
+                "choices": [
+                    [
+                        "compact",
+                        "Compact (48px)"
+                    ],
+                    [
+                        "default",
+                        "Default (60px)"
+                    ],
+                    [
+                        "comfortable",
+                        "Comfortable (80px)"
+                    ],
+                    [
+                        "custom",
+                        "Custom"
+                    ]
+                ],
+                "display": "select",
+                "display_width": null,
+                "locked": false,
+                "multiple": false,
+                "preset": null,
+                "reordering_enabled": true,
+                "required": false,
+                "default": "custom"
+            },
+            {
+                "label": "Custom vertical spacing",
+                "name": "custom_vertical_spacing",
+                "type": "number",
+                "visibility": {
+                    "controlling_field": "vertical_spacing",
+                    "controlling_value_regex": "custom",
+                    "operator": "EQUAL"
+                },
+                "display": "slider",
+                "display_width": null,
+                "locked": false,
+                "max": 200,
+                "min": 20,
+                "required": false,
+                "step": 5,
+                "suffix": "px",
+                "default": 160
+            }
+        ],
+        "display_width": null,
+        "expanded": false,
+        "group_occurrence_meta": null,
+        "locked": false,
+        "required": false,
+        "tab": "CONTENT",
+        "default": {
+            "custom_vertical_spacing": 160
+        }
+    },
+    {
+        "label": "Forms",
+        "name": "form",
+        "type": "group",
+        "use_large_label": true,
+        "icon": {
+            "name": "clipboard-list",
+            "set": "fontawesome-6.4.2",
+            "type": "SOLID"
+        },
+        "children": [
+            {
+                "label": "Custom form styles",
+                "name": "custom_styles",
+                "inline_help_text": "These are extra fields added for styling around the input boxes to make a custom design",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Background color",
+                        "name": "background_color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#FFFFFF",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border color",
+                        "name": "border_color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border focus color",
+                        "name": "border_focus_color",
+                        "inline_help_text": "This controls the color of the field border while user is interacting with it",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border width",
+                        "name": "border_width",
+                        "type": "number",
+                        "display": "number",
+                        "max": null,
+                        "min": 0,
+                        "suffix": "px",
+                        "default": 1
+                    },
+                    {
+                        "label": "Border radius",
+                        "inline_help_text": "This controls the corners of the fields, the heigher the number, the more rounded they will be",
+                        "name": "border_radius",
+                        "type": "number",
+                        "display": "number",
+                        "max": null,
+                        "min": 0,
+                        "suffix": "px",
+                        "default": 5
+                    },
+                    {
+                        "label": "Form field padding",
+                        "inline_help_text": "This controls the spacing inside the field, adding padding around the text, which will control the spacing from the text to the border",
+                        "name": "spacing",
+                        "type": "spacing",
+                        "visibility": {
+                            "hidden_subfields": {
+                                "margin": true
+                            }
+                        },
+                        "default": {
+                            "padding": {
+                                "top": {
+                                    "value": 16,
+                                    "units": "px"
+                                },
+                                "right": {
+                                    "value": 20,
+                                    "units": "px"
+                                },
+                                "bottom": {
+                                    "value": 16,
+                                    "units": "px"
+                                },
+                                "left": {
+                                    "value": 20,
+                                    "units": "px"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Input Fields",
+                "name": "input_fields",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Background color",
+                        "name": "background_color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#FFFFFF",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border color",
+                        "name": "border_color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border focus color",
+                        "name": "border_focus_color",
+                        "inline_help_text": "This controls the color of the field border while user is interacting with it",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Border width",
+                        "name": "border_width",
+                        "type": "number",
+                        "display": "number",
+                        "max": null,
+                        "min": 0,
+                        "suffix": "px",
+                        "default": 1
+                    },
+                    {
+                        "label": "Border radius",
+                        "inline_help_text": "This controls the corners of the fields, the heigher the number, the more rounded they will be",
+                        "name": "border_radius",
+                        "type": "number",
+                        "display": "number",
+                        "max": null,
+                        "min": 0,
+                        "suffix": "px",
+                        "default": 5
+                    },
+                    {
+                        "label": "Form field padding",
+                        "inline_help_text": "This controls the spacing inside the field, adding padding around the text, which will control the spacing from the text to the border",
+                        "name": "spacing",
+                        "type": "spacing",
+                        "visibility": {
+                            "hidden_subfields": {
+                                "margin": true
+                            }
+                        },
+                        "default": {
+                            "padding": {
+                                "top": {
+                                    "value": 16,
+                                    "units": "px"
+                                },
+                                "right": {
+                                    "value": 20,
+                                    "units": "px"
+                                },
+                                "bottom": {
+                                    "value": 16,
+                                    "units": "px"
+                                },
+                                "left": {
+                                    "value": 20,
+                                    "units": "px"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Label text",
+                "name": "label_text",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Label color",
+                        "name": "label_color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Font",
+                        "name": "font",
+                        "type": "font",
+                        "default": {
+                            "styles": {
+                                "text-decoration": "none"
+                            },
+                            "variant": "400"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "size": true,
+                                "color": true
+                            }
+                        }
+                    },
+                    {
+                        "label": "Size (Desktop)",
+                        "name": "size_desktop",
+                        "type": "font",
+                        "default": {
+                            "size": 16,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    },
+                    {
+                        "label": "Size (Mobile)",
+                        "name": "size_mobile",
+                        "type": "font",
+                        "default": {
+                            "size": 15,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    },
+                    {
+                        "label": "Spacing bottom",
+                        "name": "spacing_bottom",
+                        "inline_help_text": "Controls the spacing from label to input field",
+                        "required": false,
+                        "locked": false,
+                        "display": "slider",
+                        "min": 0,
+                        "max": null,
+                        "step": 1,
+                        "type": "number",
+                        "prefix": "",
+                        "suffix": "",
+                        "default": 10
+                    },
+                    {
+                        "label": "Transform",
+                        "name": "transform",
+                        "type": "choice",
+                        "choices": [
+                            [
+                                "none",
+                                "None"
+                            ],
+                            [
+                                "capitalize",
+                                "Capitalize"
+                            ],
+                            [
+                                "uppercase",
+                                "Uppercase"
+                            ],
+                            [
+                                "lowercase",
+                                "Lowercase"
+                            ]
+                        ],
+                        "display": "select",
+                        "default": "none"
+                    }
+                ]
+            },
+            {
+                "label": "Input text",
+                "name": "input_text",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Input color",
+                        "name": "color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    },
+                    {
+                        "label": "Font",
+                        "name": "font",
+                        "type": "font",
+                        "default": {
+                            "styles": {
+                                "text-decoration": "none"
+                            },
+                            "variant": "400"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "size": true,
+                                "color": true
+                            }
+                        }
+                    },
+                    {
+                        "label": "Size (Desktop)",
+                        "name": "size_desktop",
+                        "type": "font",
+                        "default": {
+                            "size": 16,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    },
+                    {
+                        "label": "Size (Mobile)",
+                        "name": "size_mobile",
+                        "type": "font",
+                        "default": {
+                            "size": 15,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    },
+                    {
+                        "label": "Transform",
+                        "name": "transform",
+                        "type": "choice",
+                        "choices": [
+                            [
+                                "none",
+                                "None"
+                            ],
+                            [
+                                "capitalize",
+                                "Capitalize"
+                            ],
+                            [
+                                "uppercase",
+                                "Uppercase"
+                            ],
+                            [
+                                "lowercase",
+                                "Lowercase"
+                            ]
+                        ],
+                        "display": "select",
+                        "default": "none"
+                    }
+                ]
+            },
+            {
+                "label": "Placeholder text",
+                "name": "placeholder_text",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Placeholder color",
+                        "name": "color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#000",
+                            "opacity": 100
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Error text",
+                "name": "error_text",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Error color",
+                        "name": "color",
+                        "type": "color",
+                        "alternate_names": [],
+                        "visibility": {
+                            "hidden_subfields": {}
+                        },
+                        "default": {
+                            "color": "#FF0000",
+                            "opacity": 100
+                        }
+                    }
+                ]
+            },
+            {
+                "label": "Misc text",
+                "name": "misc_text",
+                "inline_help_text": "For anything none input related in the form like gdpr text etc.",
+                "type": "group",
+                "children": [
+                    {
+                        "label": "Size (Desktop)",
+                        "name": "size_desktop",
+                        "type": "font",
+                        "default": {
+                            "size": 14,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    },
+                    {
+                        "label": "Size (Mobile)",
+                        "name": "size_mobile",
+                        "type": "font",
+                        "default": {
+                            "size": 14,
+                            "size_unit": "px"
+                        },
+                        "visibility": {
+                            "hidden_subfields": {
+                                "font": true,
+                                "color": true,
+                                "styles": true,
+                                "variant": true
+                            }
+                        },
+                        "display_width": "half_width"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "header",
+        "label": "Header",
+        "type": "group",
+        "children": [
+            {
+                "name": "background_color",
+                "label": "Background Color",
+                "type": "color",
+                "default": {
+                    "color": "#ffffff",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "scrolled_background_color",
+                "label": "Sticky / Scrolled Background Color",
+                "type": "color",
+                "default": {
+                    "color": "#ffffff",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "text_color",
+                "label": "Navigation Link & Text Color",
+                "type": "color",
+                "default": {
+                    "color": "#1F0B29",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "text_hover_color",
+                "label": "Navigation Link Hover Color",
+                "type": "color",
+                "default": {
+                    "color": "#F37021",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "padding_vertical",
+                "label": "Vertical Padding (px)",
+                "type": "number",
+                "display": "slider",
+                "min": 0,
+                "max": 100,
+                "step": 2,
+                "default": 20
+            }
+        ]
+    },
+    {
+        "name": "footer",
+        "label": "Footer",
+        "type": "group",
+        "children": [
+            {
+                "name": "background_color",
+                "label": "Background Color",
+                "type": "color",
+                "default": {
+                    "color": "#1F0B29",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "heading_color",
+                "label": "Column Headings Color",
+                "type": "color",
+                "default": {
+                    "color": "#ffffff",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "text_color",
+                "label": "Links & Text Color",
+                "type": "color",
+                "default": {
+                    "color": "#e0e0e0",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "text_hover_color",
+                "label": "Links Hover Color",
+                "type": "color",
+                "default": {
+                    "color": "#F37021",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "copyright_text_color",
+                "label": "Bottom Footer / Copyright Color",
+                "type": "color",
+                "default": {
+                    "color": "#aaaaaa",
+                    "opacity": 100
+                }
+            },
+            {
+                "name": "padding_top",
+                "label": "Padding Top (px)",
+                "type": "number",
+                "display": "slider",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "default": 80
+            },
+            {
+                "name": "padding_bottom",
+                "label": "Padding Bottom (px)",
+                "type": "number",
+                "display": "slider",
+                "min": 0,
+                "max": 150,
+                "step": 5,
+                "default": 40
+            }
+        ]
+    },
+    {
+        "name": "favicon",
+        "label": "Theme Favicon",
+        "type": "image",
+        "help_text": "Overrides the global HubSpot favicon for pages using this theme.",
+        "default": {
+            "src": "",
+            "alt": "Favicon",
+            "loading": "lazy"
+        }
+    }
+]

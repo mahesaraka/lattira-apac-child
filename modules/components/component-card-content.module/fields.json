@@ -1,0 +1,177 @@
+[
+  {
+    "id": "60f9f46f-b66b-4bd1-8b8d-6199b596e3a6",
+    "name": "intro_content",
+    "label": "Intro Content (Heading / Text)",
+    "required": false,
+    "locked": false,
+    "type": "richtext",
+    "display_width": null,
+    "default": "<h2>Card Content Section</h2>\n<p>This is the introduction text above the cards.</p>"
+  },
+  {
+    "id": "58f77605-0add-4a84-b012-354bc41073ed",
+    "name": "cards",
+    "label": "Cards",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "occurrence": {
+      "min": 1,
+      "max": null,
+      "sorting_label_field": null,
+      "default": 3
+    },
+    "children": [
+      {
+        "id": "fdc6d47d-3906-41a6-a077-62d990dc39f3",
+        "name": "bg_type",
+        "label": "Background Type",
+        "required": false,
+        "locked": false,
+        "display": "select",
+        "choices": [
+          [
+            "color",
+            "Color"
+          ],
+          [
+            "image",
+            "Image"
+          ]
+        ],
+        "multiple": false,
+        "reordering_enabled": false,
+        "type": "choice",
+        "display_width": null,
+        "default": "color"
+      },
+      {
+        "id": "321b1e0b-3585-4a11-b2f2-14c0cc9c3fcb",
+        "name": "bg_color",
+        "label": "Background Color",
+        "required": false,
+        "locked": false,
+        "show_opacity": true,
+        "type": "color",
+        "display_width": null,
+        "default": {
+          "color": "#F8F8F8",
+          "opacity": 100
+        }
+      },
+      {
+        "id": "056b0746-f50d-431e-8790-ab86ec10017d",
+        "name": "bg_image",
+        "label": "Background Image",
+        "required": false,
+        "locked": false,
+        "responsive": true,
+        "resizable": false,
+        "show_loading": false,
+        "type": "image",
+        "display_width": null,
+        "default": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "Card Background Image",
+          "loading": "lazy"
+        }
+      },
+      {
+        "id": "c71a39f1-7c98-4c7b-a25e-04f86fa78e12",
+        "name": "icon",
+        "label": "Image / Icon",
+        "required": false,
+        "locked": false,
+        "responsive": true,
+        "resizable": true,
+        "show_loading": true,
+        "type": "image",
+        "display_width": null,
+        "default": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "Icon",
+          "loading": "lazy",
+          "width": 50,
+          "height": 50,
+          "max_width": 50,
+          "max_height": 50
+        }
+      },
+      {
+        "id": "a9af4d2e-454c-46a3-be17-9412fff577cd",
+        "name": "card_content",
+        "label": "Card Content",
+        "required": false,
+        "locked": false,
+        "type": "richtext",
+        "display_width": null,
+        "default": "<h3>Card Title</h3>\n<p>Write your card description and content here.</p>"
+      }
+    ],
+    "default": [
+      {
+        "bg_type": "color",
+        "bg_color": {
+          "color": "#F8F8F8",
+          "opacity": 100
+        },
+        "bg_image": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "icon": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "card_content": "<h3>Card 1</h3>\n<p>Content for card number 1.</p>"
+      },
+      {
+        "bg_type": "color",
+        "bg_color": {
+          "color": "#F0F0F0",
+          "opacity": 100
+        },
+        "bg_image": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "icon": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "card_content": "<h3>Card 2</h3>\n<p>Content for card number 2.</p>"
+      },
+      {
+        "bg_type": "color",
+        "bg_color": {
+          "color": "#E8E8E8",
+          "opacity": 100
+        },
+        "bg_image": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "icon": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        },
+        "card_content": "<h3>Card 3</h3>\n<p>Content for card number 3.</p>"
+      }
+    ]
+  }
+]

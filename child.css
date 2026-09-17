@@ -1,0 +1,36 @@
+/* @import url('http://example.com/example_style.css'); */
+
+/***********************************************/
+/* CSS @imports must be at the top of the file */
+/* Add them above this section                 */
+/***********************************************/
+
+/*****************************************/
+/* Start your style declarations here    */
+/*****************************************/
+.row-fluid [class*="span"] {
+    border-radius: 20px;
+}
+
+.section-tabbed-content__cards__card__icon {
+    align-items: center;
+    display: flex;
+    margin-bottom: 40px;
+    min-height: 50px;
+    overflow: hidden;
+    position: relative
+}
+
+@media screen and (max-width: 768px) {
+    .section-tabbed-content__cards__card:last-of-type .section-tabbed-content__cards__card__icon {
+        margin-bottom: 26px
+    }
+
+    .section-tabbed-content__cards__card__icon {
+        margin-bottom: 26px
+    }
+}
+/* Hide arrow on child menu hover */
+header.header-wrapper .content-wrapper .header-column.navigation nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li a.nav-link svg {
+    display: none !important;
+}
