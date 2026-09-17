@@ -12,6 +12,23 @@
     border-radius: 20px;
 }
 
+.scalable-banner {
+    padding: 200px 0px 160px 0 !important;
+}
+
+.scalable-banner__media.scalable-banner__media--scaled {
+    border-radius: 0px 0px 20px 20px !important;
+    transform: none !important;
+}
+
+.content.scalable-banner__media--scaled {
+    transform: none !important;
+}
+
+#main-content {
+    padding-top: 0 !important;
+}
+
 .section-tabbed-content__cards__card__icon {
     align-items: center;
     display: flex;
@@ -30,7 +47,14 @@
         margin-bottom: 26px
     }
 }
-/* Hide arrow on child menu hover */
+/* Nav child hover arrow styling */
 header.header-wrapper .content-wrapper .header-column.navigation nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li a.nav-link svg {
-    display: none !important;
+    display: inline-block !important;
+    opacity: 1 !important;
+    width: 24px !important;
+    height: 24px !important;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+header.header-wrapper .content-wrapper .header-column.navigation nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li a.nav-link:hover svg {
+    transform: translateX(3px);
 }

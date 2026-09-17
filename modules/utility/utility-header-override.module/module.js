@@ -1,235 +1,270 @@
-window.addEventListener('load', function () {
-  const headerWrapper = document.querySelector('.header-wrapper');
-  const mainContent   = document.querySelector('#main-content');
+(function () {
+  function initHeader() {
+    const headerWrapper = document.querySelector('.header-wrapper.header-override') || document.querySelector('.header-wrapper');
+    if (!headerWrapper) return;
+    if (headerWrapper.dataset.jsInitialized === 'true') return;
+    headerWrapper.dataset.jsInitialized = 'true';
 
-  // initial measurements
-  let initialHeaderHeight = headerWrapper.offsetHeight;
-  let fixedHeaderHeight   = initialHeaderHeight;
-  // thresholds
-  const scrollUpThreshold = 5;       // px upward to remove “scrolled”
-  let headerHeightThresh  = initialHeaderHeight; // now let so we can update it
+    const mainContent = document.querySelector('#main-content');
+    if (mainContent) {
+      mainContent.style.removeProperty('padding-top');
+    }
 
-  // track last scroll
-  let lastScrollPos = 0;
+    function updateHeaderOffset() {
+      // Disabled padding-top offset to avoid pushing main-content down
+    }
 
-  function handleScroll() {
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    headerWrapper.classList.add('position-fixed');
 
-    // 1) ANY scroll > 0 → position-fixed + padding
-    if (scrollY > 0) {
-      if (!headerWrapper.classList.contains('position-fixed')) {
+    function handleScroll() {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollY > 15) {
+        headerWrapper.classList.add('scrolled', 'position-fixed');
+      } else {
+        headerWrapper.classList.remove('scrolled');
         headerWrapper.classList.add('position-fixed');
-        fixedHeaderHeight = headerWrapper.offsetHeight;
-        mainContent.style.paddingTop = fixedHeaderHeight + 'px';
       }
-    } else {
-      // back to very top → remove everything
-      headerWrapper.classList.remove('position-fixed', 'scrolled');
-      mainContent.style.paddingTop = '0';
     }
 
-    // 2) Once past headerHeight → add “scrolled” when scrolling down
-    if (scrollY > headerHeightThresh && scrollY > lastScrollPos) {
-      headerWrapper.classList.add('scrolled');
-    }
-
-    // 3) If already “scrolled” and user scrolls up by at least scrollUpThreshold → remove it
-    if (headerWrapper.classList.contains('scrolled') && scrollY < lastScrollPos - scrollUpThreshold) {
-      headerWrapper.classList.remove('scrolled');
-    }
-
-    lastScrollPos = scrollY;
-  }
-
-  window.addEventListener('scroll', handleScroll);
-
-  // ——— rest of your script unchanged ———
-
-  // **NEW**: Recompute header heights on resize
-  window.addEventListener('resize', function () {
-    // re-measure the header in its natural (static) state
-    // temporarily remove fixed positioning to get true height
-    const wasFixed = headerWrapper.classList.contains('position-fixed');
-    if (wasFixed) headerWrapper.classList.remove('position-fixed');
-    
-    initialHeaderHeight = headerWrapper.offsetHeight;
-    headerHeightThresh  = initialHeaderHeight;
-
-    // restore fixed if needed and reapply padding
-    if (wasFixed) {
-      headerWrapper.classList.add('position-fixed');
-      fixedHeaderHeight = headerWrapper.offsetHeight;
-      mainContent.style.paddingTop = fixedHeaderHeight + 'px';
-    }
-
-    // if we're scrolled past the new threshold, immediately apply/remove "scrolled"
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', updateHeaderOffset);
     handleScroll();
-  });
 
-  // Desktop nav hover menus
-  const navItems = document.querySelectorAll('.nav-li');
-  let delay = 1000, removeTimeout;
-  navItems.forEach(navItem => {
-    const child = navItem.querySelector('.nav-child-ul');
-    if (!child) return;
-    child.classList.remove('visible');
+    // Search Modal Handler
+    const searchModal = headerWrapper.querySelector('.search-modal-backdrop') || document.querySelector('.search-modal-backdrop');
+    const searchTriggers = headerWrapper.querySelectorAll('.js-open-search-modal, .header-search__toggle, .main-nav-mobile__search-btn');
+    const searchCloseBtns = searchModal ? searchModal.querySelectorAll('.search-modal-close, .js-close-search-modal') : [];
+    const searchInput = searchModal ? searchModal.querySelector('.search-modal-input') : null;
 
-    navItem.addEventListener('mouseenter', () => {
-      clearTimeout(removeTimeout);
-      navItems.forEach(i => {
-        const o = i.querySelector('.nav-child-ul');
-        if (o && o !== child) o.classList.remove('visible');
-      });
-      child.classList.add('visible');
-    });
-    navItem.addEventListener('mouseleave', () => {
-      removeTimeout = setTimeout(() => child.classList.remove('visible'), delay);
-    });
-    child.addEventListener('mouseenter', () => clearTimeout(removeTimeout));
-    child.addEventListener('mouseleave', () => {
-      removeTimeout = setTimeout(() => child.classList.remove('visible'), delay);
-    });
-  });
-
-  // Hamburger toggle for mobile
-  const hamburger = document.querySelector('.hamburger');
-  const mobileMenuContent = document.querySelector('.mobile-menu-content');
-  
-  hamburger.addEventListener('click', function () {
-    this.classList.toggle('is-active');
-    mobileMenuContent.classList.toggle('hidden');
-  
-    if (!mobileMenuContent.classList.contains('hidden') &&
-        !headerWrapper.classList.contains('position-fixed')) {
-      headerWrapper.classList.add('position-fixed');
-      fixedHeaderHeight = headerWrapper.offsetHeight;
-      mainContent.style.paddingTop = fixedHeaderHeight + 'px';
+    function openSearchModal() {
+      if (!searchModal) return;
+      searchModal.classList.add('is-open');
+      searchModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('search-open');
+      if (searchInput) {
+        setTimeout(function () {
+          searchInput.focus();
+        }, 100);
+      }
     }
-  });
-  
-  // NEW: Close menu if anything inside is clicked
-  mobileMenuContent.addEventListener('click', function () {
-    mobileMenuContent.classList.add('hidden');
-    hamburger.classList.remove('is-active');
-  
-    if (headerWrapper.classList.contains('position-fixed')) {
-      headerWrapper.classList.remove('position-fixed');
-      mainContent.style.paddingTop = '0';
+
+    function closeSearchModal() {
+      if (!searchModal) return;
+      searchModal.classList.remove('is-open');
+      searchModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('search-open');
     }
-  });
 
-  // Accordion for mobile
-  const accordionItems = document.querySelectorAll('.mobile-menu-content nav .nav-li.nav-accordion');
-  accordionItems.forEach(item => {
-    item.addEventListener('click', function (e) {
-      const link = e.target.closest('.nav-link.has-child');
-      if (!link) return;
-      e.preventDefault();
-      const content = item.querySelector('.accordion-content');
-      accordionItems.forEach(i => {
-        const c = i.querySelector('.accordion-content');
-        if (c !== content) c.classList.remove('open-accordion');
-      });
-      content.classList.toggle('open-accordion');
-    });
-  });
-
-  // Desktop deeper submenu hover
-  const desktopNav = document.querySelector('.header-column.navigation nav');
-  desktopNav.querySelectorAll('.nav-child-li.has-child').forEach(link => {
-    link.addEventListener('mouseenter', () => link.querySelector('ul').classList.add('open'));
-    link.addEventListener('mouseleave', () => link.querySelector('ul').classList.remove('open'));
-  });
-
-  // Mobile deeper submenu toggle
-  const mobileNavChild = document.querySelector('.mobile-menu-content');
-  if (mobileNavChild) {
-    mobileNavChild.querySelectorAll('.nav-child-li.has-child').forEach(link => {
-      link.addEventListener('click', e => {
+    searchTriggers.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
         e.preventDefault();
-        link.querySelector('ul').classList.toggle('open');
+        e.stopPropagation();
+        openSearchModal();
       });
     });
-  }
 
-  // Pill toggle click handler & sync
-  document.querySelectorAll('.header-pill-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function (e) {
-      e.stopPropagation(); // prevent closing mobile menu when clicking inside
-      const item = e.target.closest('.header-pill-toggle__item');
-      if (!item) return;
-      const href = item.getAttribute('href');
-      if (!href || href === '#' || href === 'javascript:void(0)') {
+    searchCloseBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
         e.preventDefault();
-        toggle.querySelectorAll('.header-pill-toggle__item').forEach(el => el.classList.remove('is-active'));
-        item.classList.add('is-active');
+        closeSearchModal();
+      });
+    });
 
-        // Sync other toggles (desktop vs mobile)
-        const pillIndex = item.getAttribute('data-pill');
-        document.querySelectorAll('.header-pill-toggle').forEach(otherToggle => {
-          if (otherToggle !== toggle) {
-            otherToggle.querySelectorAll('.header-pill-toggle__item').forEach(otherItem => {
-              if (otherItem.getAttribute('data-pill') === pillIndex) {
-                otherItem.classList.add('is-active');
-              } else {
-                otherItem.classList.remove('is-active');
-              }
-            });
+    if (searchModal) {
+      searchModal.addEventListener('click', function (e) {
+        if (e.target === searchModal || e.target.classList.contains('search-modal-container')) {
+          closeSearchModal();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeSearchModal();
+      }
+    });
+
+    // Quick link search tag click helper
+    if (searchModal) {
+      searchModal.querySelectorAll('.search-modal-tag').forEach(function (tag) {
+        tag.addEventListener('click', function (e) {
+          const href = tag.getAttribute('href');
+          if (!href || href === '#' || href === 'javascript:void(0)') {
+            e.preventDefault();
+            const term = tag.textContent.trim();
+            if (searchInput) {
+              searchInput.value = term;
+              const form = tag.closest('.search-modal-card') ? tag.closest('.search-modal-card').querySelector('.search-modal-form') : null;
+              if (form) form.submit();
+            }
           }
+        });
+      });
+    }
+
+    // Desktop nav hover menus (supports mega-cards, mega-columns, and nav-child-ul)
+    const navItems = headerWrapper.querySelectorAll('.header-column.navigation .nav-li');
+    let removeTimeout;
+    const delay = 400;
+
+    navItems.forEach(function (navItem) {
+      const dropdown = navItem.querySelector('.main-nav__mega-dropdown') || navItem.querySelector('.nav-child-ul');
+      if (!dropdown) return;
+      dropdown.classList.remove('visible');
+
+      function openMenu() {
+        clearTimeout(removeTimeout);
+        navItems.forEach(function (i) {
+          if (i !== navItem) {
+            const o = i.querySelector('.main-nav__mega-dropdown') || i.querySelector('.nav-child-ul');
+            if (o) o.classList.remove('visible');
+          }
+        });
+        dropdown.classList.add('visible');
+      }
+
+      function closeMenuWithDelay() {
+        clearTimeout(removeTimeout);
+        removeTimeout = setTimeout(function () {
+          dropdown.classList.remove('visible');
+        }, delay);
+      }
+
+      navItem.addEventListener('mouseenter', openMenu);
+      navItem.addEventListener('mouseleave', closeMenuWithDelay);
+
+      dropdown.addEventListener('mouseenter', function () {
+        clearTimeout(removeTimeout);
+      });
+      dropdown.addEventListener('mouseleave', closeMenuWithDelay);
+    });
+
+    // Hamburger toggle for mobile
+    const hamburger = headerWrapper.querySelector('.hamburger');
+    const mobileMenuContent = headerWrapper.querySelector('.mobile-menu-content');
+
+    if (hamburger && mobileMenuContent) {
+      hamburger.addEventListener('click', function () {
+        this.classList.toggle('is-active');
+        mobileMenuContent.classList.toggle('hidden');
+      });
+
+      // Close menu when clicking link (not accordion trigger)
+      mobileMenuContent.querySelectorAll('a:not(.has-child)').forEach(function (link) {
+        link.addEventListener('click', function () {
+          mobileMenuContent.classList.add('hidden');
+          hamburger.classList.remove('is-active');
+        });
+      });
+    }
+
+    // Accordion for mobile
+    const accordionItems = headerWrapper.querySelectorAll('.mobile-menu-content nav .nav-li.nav-accordion');
+    accordionItems.forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        const link = e.target.closest('.nav-link.has-child');
+        if (!link) return;
+        e.preventDefault();
+        const content = item.querySelector('.accordion-content');
+        accordionItems.forEach(function (i) {
+          const c = i.querySelector('.accordion-content');
+          if (c !== content && c) c.classList.remove('open-accordion');
+        });
+        if (content) content.classList.toggle('open-accordion');
+      });
+    });
+
+    // Desktop deeper submenu hover (classic list)
+    const desktopNav = headerWrapper.querySelector('.header-column.navigation nav');
+    if (desktopNav) {
+      desktopNav.querySelectorAll('.nav-child-li.has-child').forEach(function (link) {
+        link.addEventListener('mouseenter', function () {
+          const ul = link.querySelector('ul');
+          if (ul) ul.classList.add('open');
+        });
+        link.addEventListener('mouseleave', function () {
+          const ul = link.querySelector('ul');
+          if (ul) ul.classList.remove('open');
+        });
+      });
+    }
+
+    // Mobile deeper submenu toggle
+    if (mobileMenuContent) {
+      mobileMenuContent.querySelectorAll('.nav-child-li.has-child').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const ul = link.querySelector('ul');
+          if (ul) ul.classList.toggle('open');
+        });
+      });
+    }
+
+    // Pill toggle click handler & sync
+    headerWrapper.querySelectorAll('.header-pill-toggle').forEach(function (toggle) {
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const item = e.target.closest('.header-pill-toggle__item');
+        if (!item) return;
+        const href = item.getAttribute('href');
+        if (!href || href === '#' || href === 'javascript:void(0)') {
+          e.preventDefault();
+          toggle.querySelectorAll('.header-pill-toggle__item').forEach(function (el) {
+            el.classList.remove('is-active');
+          });
+          item.classList.add('is-active');
+        }
+      });
+    });
+
+    // Pill Toggle: Automatic Segment URL Matching Fallback
+    headerWrapper.querySelectorAll('.header-pill-toggle-wrapper').forEach(function (wrapper) {
+      const mode = wrapper.getAttribute('data-detection') || 'auto';
+      if (mode !== 'auto') return;
+
+      const path = (window.location.pathname || '').toLowerCase();
+      const p1Key = (wrapper.getAttribute('data-p1-keyword') || 'spec').toLowerCase();
+      const p2Key = (wrapper.getAttribute('data-p2-keyword') || 'source').toLowerCase();
+
+      const segs = path.split(/[\/\-_.]+/).filter(Boolean);
+      const p1Match = segs.indexOf(p1Key) !== -1;
+      const p2Match = segs.indexOf(p2Key) !== -1;
+
+      let activePill = null;
+      if (p1Match && !p2Match) {
+        activePill = '1';
+      } else if (p2Match && !p1Match) {
+        activePill = '2';
+      } else if (p1Match && p2Match) {
+        if (path.indexOf('lattira-' + p1Key) !== -1) {
+          activePill = '1';
+        } else if (path.indexOf('lattira-' + p2Key) !== -1) {
+          activePill = '2';
+        } else {
+          activePill = '1';
+        }
+      }
+
+      if (activePill) {
+        wrapper.querySelectorAll('.header-pill-toggle__item').forEach(function (item) {
+          if (item.getAttribute('data-pill') === activePill) {
+            item.classList.add('is-active');
+          } else {
+            item.classList.remove('is-active');
+          }
+        });
+      } else {
+        wrapper.querySelectorAll('.header-pill-toggle__item').forEach(function (item) {
+          item.classList.remove('is-active');
         });
       }
     });
-  });
+  }
 
-  // Auto-detect active pill based on current browser URL if in auto mode
-  const currentPath = window.location.pathname.toLowerCase();
-  
-  const matchPillKeyword = (path, keyword) => {
-    if (!keyword) return false;
-    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp('(^|[^a-z0-9])' + escaped + '([^a-z0-9]|$)', 'i');
-    return regex.test(path);
-  };
-
-  document.querySelectorAll('.header-pill-toggle-wrapper[data-detection="auto"]').forEach(wrapper => {
-    const k1 = (wrapper.getAttribute('data-p1-keyword') || 'spec').toLowerCase();
-    const k2 = (wrapper.getAttribute('data-p2-keyword') || 'source').toLowerCase();
-
-    const m1 = matchPillKeyword(currentPath, k1);
-    const m2 = matchPillKeyword(currentPath, k2);
-
-    let activePill = null;
-    if (m1 && !m2) {
-      activePill = '1';
-    } else if (m2 && !m1) {
-      activePill = '2';
-    } else if (m1 && m2) {
-      // Both match: prioritize "lattira-[keyword]"
-      if (matchPillKeyword(currentPath, 'lattira-' + k1)) {
-        activePill = '1';
-      } else if (matchPillKeyword(currentPath, 'lattira-' + k2)) {
-        activePill = '2';
-      } else {
-        activePill = '1';
-      }
-    }
-
-    if (activePill) {
-      wrapper.querySelectorAll('.header-pill-toggle__item').forEach(item => {
-        if (item.getAttribute('data-pill') === activePill) {
-          item.classList.add('is-active');
-        } else {
-          item.classList.remove('is-active');
-        }
-      });
-    } else {
-      // Neither matches (e.g. /au/about-us): Neither pill is active!
-      wrapper.querySelectorAll('.header-pill-toggle__item').forEach(item => {
-        item.classList.remove('is-active');
-      });
-    }
-  });
-});
-
-
-
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeader);
+  } else {
+    initHeader();
+  }
+  window.addEventListener('load', initHeader);
+})();

@@ -1,44 +1,47 @@
 <style>
-  /* Hide the global default header when this Header Override module is on the page */
+  /* =========================================================================
+     When Header Override is present on a page:
+     Hide the default/global header and its enclosing HubSpot module containers
+     ========================================================================= */
   header.header-wrapper:not(.header-override),
-  .header-wrapper:not(.header-override),
-  #hs_cos_wrapper_module_new_lattira_global_header,
-  #hs_cos_wrapper_module_17466224446485,
-  div:has(> header.header-wrapper:not(.header-override)),
-  div:has(> #hs_cos_wrapper_module_new_lattira_global_header),
-  div:has(> #hs_cos_wrapper_module_17466224446485),
-  [data-global-resource-path*="header"]:not(:has(.header-override)) {
+  .header-wrapper:not(.header-override) {
     display: none !important;
-  }
-
-  /* Make parent section and its D&D wrappers completely full-width with 0 padding */
-  .dnd-section:has(.header-override),
-  .override-header-section-fullwidth {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
   }
 
-  .dnd-section:has(.header-override) > .row-fluid,
-  .override-header-section-fullwidth > .row-fluid,
-  .dnd-section:has(.header-override) .dnd-column,
-  .override-header-section-fullwidth .dnd-column,
-  .dnd-section:has(.header-override) .dnd-row,
-  .override-header-section-fullwidth .dnd-row,
-  .dnd-section:has(.header-override) .dnd-module,
-  .override-header-section-fullwidth .dnd-module,
-  .dnd-section:has(.header-override) .hs_cos_wrapper_type_module,
-  .override-header-section-fullwidth .hs_cos_wrapper_type_module {
-    max-width: 100% !important;
-    width: 100% !important;
+  /* Hide any parent wrapper containing the non-override header */
+  .hs_cos_wrapper:has(> header.header-wrapper:not(.header-override)),
+  .hs_cos_wrapper_type_module:has(header.header-wrapper:not(.header-override)),
+  .widget-type-global_module:has(header.header-wrapper:not(.header-override)),
+  .header-container-wrapper:has(header.header-wrapper:not(.header-override)),
+  .dnd-module:has(header.header-wrapper:not(.header-override)),
+  div[id*="global_header"]:has(header.header-wrapper:not(.header-override)),
+  div[id*="header"]:has(> header.header-wrapper:not(.header-override)) {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: hidden !important;
   }
 
-  .header-wrapper.header-override {
-    width: 100% !important;
-    max-width: 100% !important;
+  /* Guarantee the Header Override remains visible at the top */
+  header.header-wrapper.header-override {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 </style>
 
@@ -46,39 +49,78 @@
 <script>
   (function() {
     function setupHeaderOverride() {
-      // 1. Hide the global default header
-      var globalHeaders = document.querySelectorAll('header.header-wrapper:not(.header-override), #hs_cos_wrapper_module_new_lattira_global_header, #hs_cos_wrapper_module_17466224446485');
-      for (var i = 0; i < globalHeaders.length; i++) {
-        globalHeaders[i].style.display = 'none';
-        var partial = globalHeaders[i].closest('.hs_cos_wrapper_global_partial');
-        if (partial) {
-          partial.style.display = 'none';
+      var overrideHeader = document.getElementById('header-override-{{ name }}');
+      if (!overrideHeader) return;
+
+      var allHeaders = document.querySelectorAll('header.header-wrapper, .header-wrapper');
+      var globalHeader = null;
+
+      for (var i = 0; i < allHeaders.length; i++) {
+        var h = allHeaders[i];
+        if (h !== overrideHeader && !h.classList.contains('header-override') && (!h.id || h.id.indexOf('header-override') === -1)) {
+          if (!globalHeader) globalHeader = h;
+          h.style.setProperty('display', 'none', 'important');
+          h.style.setProperty('height', '0', 'important');
+          h.setAttribute('aria-hidden', 'true');
+
+          var cur = h.parentElement;
+          while (cur && cur !== document.body && !cur.classList.contains('body-wrapper')) {
+            if (
+              cur.classList.contains('hs_cos_wrapper_type_module') ||
+              cur.classList.contains('widget-type-global_module') ||
+              cur.classList.contains('header-container-wrapper') ||
+              (cur.id && cur.id.toLowerCase().indexOf('header') !== -1)
+            ) {
+              cur.style.setProperty('display', 'none', 'important');
+              cur.style.setProperty('height', '0', 'important');
+              cur.style.setProperty('padding', '0', 'important');
+              cur.style.setProperty('margin', '0', 'important');
+            }
+            cur = cur.parentElement;
+          }
         }
       }
 
-      // 2. Remove dnd-section class and make parent section full-width
-      var header = document.getElementById('header-override-{{ name }}');
-      if (header) {
-        var parentSection = header.closest('.dnd-section');
-        if (parentSection) {
-          parentSection.classList.remove('dnd-section');
-          parentSection.classList.add('override-header-section-fullwidth');
+      // Inherit navigation from global header if enabled
+      var shouldInherit = overrideHeader.getAttribute('data-inherit-nav') === 'true';
+      if (shouldInherit && globalHeader) {
+        var gDesktopNav = globalHeader.querySelector('.header-column.navigation nav');
+        var oDesktopNav = overrideHeader.querySelector('.header-column.navigation nav');
+        if (gDesktopNav && oDesktopNav && gDesktopNav.innerHTML.trim().length > 0) {
+          oDesktopNav.innerHTML = gDesktopNav.innerHTML;
         }
 
-        {% if !is_in_editor %}
-        var bodyWrapper = document.querySelector('.body-wrapper');
-        if (bodyWrapper && header.parentElement !== bodyWrapper) {
-          bodyWrapper.insertBefore(header, bodyWrapper.firstChild);
+        var gMobileNav = globalHeader.querySelector('.mobile-menu-content nav');
+        var oMobileNav = overrideHeader.querySelector('.mobile-menu-content nav');
+        if (gMobileNav && oMobileNav && gMobileNav.innerHTML.trim().length > 0) {
+          oMobileNav.innerHTML = gMobileNav.innerHTML;
         }
-        {% endif %}
+
+        var gTopMenu = globalHeader.querySelector('.site-topbar .sidebar-navigation');
+        var oTopMenu = overrideHeader.querySelector('.site-topbar .sidebar-navigation');
+        if (gTopMenu && oTopMenu && (!oTopMenu.children || oTopMenu.children.length === 0)) {
+          oTopMenu.innerHTML = gTopMenu.innerHTML;
+        }
+      }
+
+      // Move override header to the very top of .body-wrapper
+      var bodyWrapper = document.querySelector('.body-wrapper') || document.body;
+      if (bodyWrapper && overrideHeader.parentElement !== bodyWrapper) {
+        var originalParent = overrideHeader.parentElement;
+        bodyWrapper.insertBefore(overrideHeader, bodyWrapper.firstChild);
+        if (originalParent && originalParent !== bodyWrapper && originalParent !== document.body) {
+          if (originalParent.children.length === 0 || originalParent.innerText.trim() === '') {
+            originalParent.style.setProperty('display', 'none', 'important');
+          }
+        }
       }
     }
 
+    setupHeaderOverride();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', setupHeaderOverride);
-    } else {
-      setupHeaderOverride();
     }
+    window.addEventListener('load', setupHeaderOverride);
   })();
 </script>
 {% end_require_js %}
@@ -87,8 +129,8 @@
   {% set p = module.pill_toggle %}
   {% if p.enable_pill_toggle %}
     {# Determine Active Pill #}
-    {% set p1_keyword = (p.pill_1.url_keyword || 'spec')|lower %}
-    {% set p2_keyword = (p.pill_2.url_keyword || 'source')|lower %}
+    {% set p1_keyword = (p.pill_1.url_keyword|default('spec'))|lower %}
+    {% set p2_keyword = (p.pill_2.url_keyword|default('source'))|lower %}
     
     {% set p1_active = false %}
     {% set p2_active = false %}
@@ -131,7 +173,7 @@
     {% endif %}
 
     <div class="header-pill-toggle-wrapper{% if is_mobile %} header-pill-toggle-wrapper--mobile{% endif %}" 
-         data-detection="{{ p.detection_mode || 'auto' }}"
+         data-detection="{{ p.detection_mode|default('auto') }}"
          data-p1-keyword="{{ p1_keyword }}"
          data-p2-keyword="{{ p2_keyword }}">
       <div class="header-pill-toggle" role="group" aria-label="Toggle">
@@ -152,7 +194,7 @@
           data-pill="1"
           data-keyword="{{ p1_keyword }}"
         >
-          <span>{{ p.pill_1.text || 'Spec' }}</span>
+          <span>{{ p.pill_1.text|default('Spec') }}</span>
         </a>
 
         {# Pill 2 #}
@@ -172,7 +214,7 @@
           data-pill="2"
           data-keyword="{{ p2_keyword }}"
         >
-          <span>{{ p.pill_2.text || 'Source' }}</span>
+          <span>{{ p.pill_2.text|default('Source') }}</span>
         </a>
       </div>
     </div>
@@ -182,15 +224,72 @@
 {% set header_theme = widget_data.utility_menu_theme.menu_theme %}
 {% set hide_menu = widget_data.utility_menu_theme.hide_navigation %}
 
-<header id="header-override-{{ name }}" class="header-wrapper header-override {{ header_theme }}">
+{% set has_custom_nav = false %}
+{% for item in module.navigation.navigation_items %}
+  {% if (item.url_text and item.url_text != 'Link Text') or item.child_menu|length > 0 or item.url.href %}
+    {% set has_custom_nav = true %}
+  {% endif %}
+{% endfor %}
+{% set should_inherit_nav = true %}
+{% if module.navigation.inherit_global_navigation is defined %}
+  {% set should_inherit_nav = module.navigation.inherit_global_navigation %}
+{% elif has_custom_nav %}
+  {% set should_inherit_nav = false %}
+{% endif %}
+<header id="header-override-{{ name }}" class="header-wrapper header-override {{ header_theme }}" data-inherit-nav="{{ should_inherit_nav ? 'true' : 'false' }}">
+  {# =========================================================================
+     Top Utility Bar: Search Icon Trigger & Custom Menu (Max 3 Items)
+     ========================================================================= #}
+  {% if module.top_bar.enable_top_bar %}
+  <div class="site-topbar header-utility-bar">
+    <div class="site-topbar__inner header-utility-bar__inner">
+      <div class="site-topbar__group header-utility-bar__group">
+        {# Search Icon Trigger (Opens Dynamic Popup Modal) #}
+        {% if module.top_bar.enable_search %}
+        <div class="nav-search">
+          <button type="button" class="nav-search__btn header-search__toggle js-open-search-modal" aria-label="Search website" title="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M15.6484 13.8669C16.1172 14.3669 16.1172 15.1483 15.6484 15.6484C15.1483 16.1172 14.3669 16.1172 13.8669 15.6484L10.1476 11.8978C8.86611 12.7417 7.30338 13.1793 5.61562 12.9605C2.74019 12.5542 0.427344 10.2101 0.0522878 7.36589C-0.479042 3.11525 3.11525 -0.479042 7.36589 0.0522878C10.2101 0.427344 12.5542 2.74019 12.9605 5.61562C13.1793 7.30338 12.7417 8.86611 11.8978 10.1163L15.6484 13.8669ZM2.49015 6.49076C2.49015 8.70984 4.27167 10.4914 6.49076 10.4914C8.67859 10.4914 10.4914 8.70984 10.4914 6.49076C10.4914 4.30293 8.67859 2.49015 6.49076 2.49015C4.27167 2.49015 2.49015 4.30293 2.49015 6.49076Z" fill="black"/>
+            </svg>
+          </button>
+        </div>
+        {% endif %}
+
+        {# Custom Menu Items (Max 3) #}
+        {% if module.top_bar.custom_menu|length > 0 %}
+        <ul class="sidebar-navigation header-utility-menu">
+          {% for item in module.top_bar.custom_menu %}
+            {% if loop.index <= 3 %}
+            <li class="sidebar-item header-utility-menu__item">
+              {% set item_href = item.link_url.url.href %}
+              {% if item.link_url.url.type is equalto "EMAIL_ADDRESS" %}
+                {% set item_href = "mailto:" + item_href %}
+              {% elif item.link_url.url.type is equalto "PHONE_NUMBER" %}
+                {% set item_href = "tel:" + item_href %}
+              {% endif %}
+              <a href="{{ item_href|default('javascript:void(0)') }}" 
+                 class="sidebar-link header-utility-menu__link"
+                 {% if item.link_url.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}
+                 {% if item.link_url.no_follow %}rel="nofollow"{% endif %}>
+                {{ item.link_text }}
+              </a>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="content-wrapper">
     <div class="header-column logo">
-      <a href="{{ module.logos.logo_url.href || '/'  }}" class="logo-cover-link"></a>
-      <img src="{{ module.logos.desktop_logo.src }}" alt="{{ module.logos.desktop_logo.alt }}" class="desktop-logo"
-        loading="lazy" />
-      <img src="{{ module.logos.sticky_logo.src }}" alt="{{ module.logos.sticky_logo.alt }}" class="sticky-logo"
-        loading="lazy" />
+      <a href="{{ module.logos.logo_url.href|default('/') }}" class="logo-cover-link"></a>
+      <img src="{{ module.logos.desktop_logo.src }}" alt="{{ module.logos.desktop_logo.alt }}" class="desktop-logo" loading="lazy" />
+      <img src="{{ module.logos.sticky_logo.src }}" alt="{{ module.logos.sticky_logo.alt }}" class="sticky-logo" loading="lazy" />
     </div>
+
     {% if !hide_menu %}
     <div class="header-column nav-cta-wrapper">
       <div class="header-column navigation">
@@ -198,80 +297,130 @@
           <ul class="nav-ul">
             {% for navigation_item in module.navigation.navigation_items %}
             {% if navigation_item.add_child_menu %}
-            <li class="nav-li {% if navigation_item.child_menu|length >= 2 %}mega{% endif %}">
-              <a href="{% if navigation_item.url.href %}{{ navigation_item.url.href }}{% else %}javascript:void(0){% endif %}"
-                class="nav-link has-child top-menu-link">{{ navigation_item.url_text }}
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                  <path
-                    d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
-                    stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </a>
-              {% if navigation_item.child_menu|length >= 9999 %}
-              {% else %}
-              {% for child_menu in navigation_item.child_menu %}
+              {% set is_mega = true %}
+              {% if navigation_item.child_menu|length == 1 and navigation_item.child_menu[0].layout_settings == 'simple' %}
+                {% set is_mega = false %}
+              {% endif %}
 
-              <ul class="
-                nav-child-ul
-                {% if (child_menu.child_menu_links | length > 3) and (child_menu.layout_settings == 'show_desc') %}  {% endif %}
-                ">
-                {% for navigation_item in child_menu.child_menu_links %}
-                <li class="nav-child-li {% if navigation_item.child_menu_items | length > 0 %}has-child{% endif %}">
+              <li class="nav-li {% if is_mega %}mega{% endif %}">
+                <a href="{% if navigation_item.url.href %}{{ navigation_item.url.href }}{% else %}javascript:void(0){% endif %}"
+                  class="nav-link has-child top-menu-link">
+                  <span>{{ navigation_item.url_text }}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                    <path
+                      d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
+                      stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
 
-                  <a href="{{ navigation_item.url_field.href }}" class="nav-link">
-                    <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M16 32.8C24.8366 32.8 32 25.6366 32 16.8C32 7.96349 24.8366 0.800049 16 0.800049C7.16344 0.800049 0 7.96349 0 16.8C0 25.6366 7.16344 32.8 16 32.8Z"
-                        fill="white" />
-                      <path
-                        d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z"
-                        fill="#321432" />
-                    </svg>
+                {% for child_menu in navigation_item.child_menu %}
+                  {% set layout_setting = child_menu.layout_settings|default('cards') %}
+                  {% if layout_setting == 'columns' %}
+                    <div class="main-nav__mega-dropdown mega-columns-dropdown">
+                      <div class="mega-dropdown__panel">
+                        <div class="mega-columns-wrapper">
+                          <div class="mega-column">
+                            {% if child_menu.child_menu_title %}
+                              <p class="mega-column-title">{{ child_menu.child_menu_title }}</p>
+                            {% endif %}
+                            <div class="mega-column-links">
+                              {% for link in child_menu.child_menu_links %}
+                              <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="mega-column-link">
+                                {{ link.url_text }}
+                              </a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% elif layout_setting == 'simple' %}
+                    <ul class="nav-child-ul">
+                      {% for link in child_menu.child_menu_links %}
+                      <li class="nav-child-li {% if link.child_menu_items|length > 0 %}has-child{% endif %}">
+                        <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="nav-link">
+                          <svg width="50" height="50" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16.8" r="16" fill="#600087" />
+                            <path d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z" fill="#FFFFFF" />
+                          </svg>
+                          <span>{{ link.url_text }}</span>
+                        </a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    {# DEFAULT TO CARDS GRID (for 'cards', 'show_desc', 'hide_desc', empty/null) #}
+                    <div class="main-nav__mega-dropdown mega-cards-dropdown">
+                      <div class="mega-dropdown__panel mega-cards-panel">
+                        <div class="mega-dropdown__body mega-cards-body">
+                          <div class="mega-cards-section w-full">
+                            {% if child_menu.child_menu_title %}
+                              <p class="mega-category-title">{{ child_menu.child_menu_title }}</p>
+                            {% endif %}
+                            <div class="mega-cards-grid">
+                              {% for link in child_menu.child_menu_links %}
+                              <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="mega-card-item">
+                                <div class="mega-card-icon-wrap">
+                                  {% if link.image.src %}
+                                    <img src="{{ link.image.src }}" width="50" height="50" alt="{{ link.image.alt|default(link.url_text) }}" loading="lazy" class="mega-card-icon-img">
+                                  {% else %}
+                                    <div class="mega-card-icon-placeholder">
+                                      <svg width="50" height="50" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="16" cy="16.8" r="16" fill="#600087" />
+                                        <path d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z" fill="#FFFFFF" />
+                                      </svg>
+                                    </div>
+                                  {% endif %}
+                                </div>
+                                <div class="mega-card-content">
+                                  <p class="mega-card-title">
+                                    {{ link.url_text }}
+                                  </p>
+                                  {% if link.description %}
+                                    <p class="mega-card-desc">{{ link.description }}</p>
+                                  {% endif %}
+                                </div>
+                              </a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
 
-                    <span>{{ navigation_item.url_text }}</span>
-                    {% if navigation_item.child_menu_items | length > 0 %}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                      <path
-                        d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
-                        stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    {% endif %}
-                  </a>
-                  {% if child_menu.layout_settings == "show_desc" %}
-                  <p class="child-menu-description">{{ navigation_item.description }}</p>
+                        {% set b_enabled = child_menu.enable_bottom_bar %}
+                        {% set b_links = child_menu.bottom_bar_links %}
+                        {% if b_enabled and b_links|length > 0 %}
+                        <div class="mega-dropdown-bottom-bar">
+                          {% for b_link in b_links %}
+                            {% if loop.index > 1 %}
+                              <span class="mega-bottom-sep" aria-hidden="true"></span>
+                            {% endif %}
+                            <a href="{{ b_link.link_url.url.href|default('javascript:void(0)') }}" class="mega-bottom-link" {% if b_link.link_url.open_in_new_tab %}target="_blank"{% endif %}>
+                              {{ b_link.link_text }}
+                            </a>
+                          {% endfor %}
+                        </div>
+                        {% endif %}
+                      </div>
+                    </div>
                   {% endif %}
-                  {% if navigation_item.child_menu_items | length > 0 %}
-                  <ul>
-                    {% for child_nav_item in navigation_item.child_menu_items %}
-                    <li>
-                      <a href="{{ child_nav_item.url }}" class="nav-link">
-                        {{ child_nav_item.linkLabel }}
-                      </a>
-                    </li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </li>
                 {% endfor %}
-              </ul>
-              {% endfor %} {% endif %}
-            </li>
+              </li>
             {% else %}
-            <li class="nav-li">
-              <a href="{{ navigation_item.url.href }}" class="nav-link top-menu-link">{{ navigation_item.url_text }}</a>
-            </li>
-            {% endif %} {% endfor %}
+              <li class="nav-li">
+                <a href="{{ navigation_item.url.href }}" class="nav-link top-menu-link">{{ navigation_item.url_text }}</a>
+              </li>
+            {% endif %}
+            {% endfor %}
           </ul>
         </nav>
         {{ render_pill_toggle(false) }}
       </div>
+
       <div class="header-column cta">
-        {% if content.translated_content.values()|selectattr('published')|length || is_listing_view &&
-        group.translations %}
+        {% if (content.translated_content.values()|selectattr('published')|length > 0) or (is_listing_view and group.translations) %}
         <div class="custom-language header__language-switcher header--element">
           <div class="header__language-switcher--label">
             {% language_switcher display_mode='pagelang' %}
-            {#<div class="header__language-switcher--label-current"> {{ locale_name(locale) }}</div>#}
           </div>
         </div>
         {% endif %}
@@ -288,8 +437,7 @@
           {% endif %}
 
           <a {% if cta.cta_settings.button_settings.button_url.url.type is equalto "CALL_TO_ACTION" %} href="{{ href }}"
-            {# The href here is not escaped as it is not editable and functions as a JavaScript call to the associated
-            CTA #} {% else %} href="{{ href|escape_url }}" {% endif %} {% if
+            {% else %} href="{{ href ? href|escape_url : 'javascript:void(0)' }}" {% endif %} {% if
             cta.cta_settings.button_settings.button_url.open_in_new_tab %} target="_blank" {% endif %} {% if
             cta.cta_settings.button_settings.button_url.rel %}
             rel="{{ cta.cta_settings.button_settings.button_url.rel|escape_attr }}" {% endif %}
@@ -301,7 +449,17 @@
         </div>
         {% endfor %}
       </div>
+
       <div class="header-column mobile-menu">
+        {% if module.top_bar.enable_top_bar and module.top_bar.enable_search %}
+        <div class="header-search header-search--mobile">
+          <button type="button" class="header-search__toggle js-open-search-modal" aria-label="Search website" title="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M15.6484 13.8669C16.1172 14.3669 16.1172 15.1483 15.6484 15.6484C15.1483 16.1172 14.3669 16.1172 13.8669 15.6484L10.1476 11.8978C8.86611 12.7417 7.30338 13.1793 5.61562 12.9605C2.74019 12.5542 0.427344 10.2101 0.0522878 7.36589C-0.479042 3.11525 3.11525 -0.479042 7.36589 0.0522878C10.2101 0.427344 12.5542 2.74019 12.9605 5.61562C13.1793 7.30338 12.7417 8.86611 11.8978 10.1163L15.6484 13.8669ZM2.49015 6.49076C2.49015 8.70984 4.27167 10.4914 6.49076 10.4914C8.67859 10.4914 10.4914 8.70984 10.4914 6.49076C10.4914 4.30293 8.67859 2.49015 6.49076 2.49015C4.27167 2.49015 2.49015 4.30293 2.49015 6.49076Z" fill="black"/>
+            </svg>
+          </button>
+        </div>
+        {% endif %}
         <div class="hamburger" id="hamburger-8">
           <span class="line"></span>
           <span class="line"></span>
@@ -309,90 +467,219 @@
         </div>
       </div>
     </div>
-
     {% endif %}
   </div>
 
-  <!-- 
-**********************************
-MOBILE MENU
-********************************** -->
-
-
+  {# =========================================================================
+     MOBILE MENU DRAWER
+     ========================================================================= #}
   <div class="mobile-menu-content hidden">
+    {# Mobile Search Trigger Box #}
+    {% if module.top_bar.enable_top_bar and module.top_bar.enable_search %}
+    <div class="mobile-search-box">
+      <button type="button" class="mobile-search-trigger-btn js-open-search-modal">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+          <path d="M15.6484 13.8669C16.1172 14.3669 16.1172 15.1483 15.6484 15.6484C15.1483 16.1172 14.3669 16.1172 13.8669 15.6484L10.1476 11.8978C8.86611 12.7417 7.30338 13.1793 5.61562 12.9605C2.74019 12.5542 0.427344 10.2101 0.0522878 7.36589C-0.479042 3.11525 3.11525 -0.479042 7.36589 0.0522878C10.2101 0.427344 12.5542 2.74019 12.9605 5.61562C13.1793 7.30338 12.7417 8.86611 11.8978 10.1163L15.6484 13.8669ZM2.49015 6.49076C2.49015 8.70984 4.27167 10.4914 6.49076 10.4914C8.67859 10.4914 10.4914 8.70984 10.4914 6.49076C10.4914 4.30293 8.67859 2.49015 6.49076 2.49015C4.27167 2.49015 2.49015 4.30293 2.49015 6.49076Z" fill="black"/>
+        </svg>
+        <span>{{ module.top_bar.search_popup_title|default('Search website...') }}</span>
+      </button>
+    </div>
+    {% endif %}
+
     <nav>
       <ul class="nav-ul">
-        {% for navigation_item in module.navigation.navigation_items %} {% if
-        navigation_item.add_child_menu %}
-        <li class="nav-li nav-accordion">
-          <a {% if navigation.url.href %}href="{{ navigation.url.href }}" {% endif %} class="nav-link has-child">{{
-            navigation_item.url_text }}
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-              <path
-                d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
-                stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
-          <div class="accordion-content">
-            {% if navigation_item.child_menu|length >= 2 %}
-            {% else %}
-            {% for child_menu in navigation_item.child_menu %}
-            <ul class="nav-child-ul">
-              {% for navigation_item in child_menu.child_menu_links %}
-              <li class="nav-child-li {% if navigation_item.child_menu_items | length > 0 %}has-child{% endif %}">
-                <a {% if navigation_item.url_field.href %}href="{{ navigation_item.url_field.href }}" {% endif %}
-                  class="nav-link">
-                  <span>{{ navigation_item.url_text }} </span>
-                  {% if navigation_item.child_menu_items | length > 0 %}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                    <path
-                      d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1"
-                      stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  {% endif %}
-                </a>
-                {% if navigation_item.child_menu_items | length > 0 %}
-                <ul class="asd">
-                  {% for child_nav_item in navigation_item.child_menu_items %}
-                  <li>
-                    <a href="{{ child_nav_item.url }}" class="nav-link">
-                      {{child_nav_item.linkLabel}}
-                    </a>
-                  </li>
-                  {% endfor %}
-                </ul>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-            {% endfor %} {% endif %}
-          </div>
-        </li>
-        {% else %}
-        <li class="nav-li">
-          <a href="{{ navigation_item.url.href }}" class="nav-link">{{ navigation_item.url_text }}</a>
+        {% for navigation_item in module.navigation.navigation_items %}
+        {% if navigation_item.add_child_menu %}
 
-        </li>
-        {% endif %} {% endfor %}
+
+          <li class="nav-li nav-accordion">
+            <a href="javascript:void(0)" class="nav-link has-child">
+              <span>{{ navigation_item.url_text }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                <path d="M1 1L4.86957 4.94704C4.88588 4.96369 4.90594 4.97702 4.92839 4.98615C4.95085 4.99528 4.9752 5 4.99983 5C5.02446 5 5.0488 4.99528 5.07126 4.98615C5.09372 4.97702 5.11377 4.96369 5.13009 4.94704L9 1" stroke="#4D4D4D" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+
+            <div class="accordion-content">
+              {% for child_menu in navigation_item.child_menu %}
+                {% set layout_setting = child_menu.layout_settings|default('cards') %}
+                {% if layout_setting == 'columns' %}
+                  <div class="mobile-mega-columns">
+                    {% if child_menu.child_menu_title %}
+                      <p class="mobile-mega-heading">{{ child_menu.child_menu_title }}</p>
+                    {% endif %}
+                    <div class="mobile-mega-column-links">
+                      {% for link in child_menu.child_menu_links %}
+                      <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="mobile-mega-column-link">
+                        {{ link.url_text }}
+                      </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% elif layout_setting == 'simple' %}
+                  <ul class="nav-child-ul">
+                    {% for link in child_menu.child_menu_links %}
+                    <li class="nav-child-li">
+                      <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="nav-link">
+                        <span>{{ link.url_text }}</span>
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  {# DEFAULT TO CARDS FOR MOBILE #}
+                  <div class="mobile-mega-cards">
+                    {% if child_menu.child_menu_title %}
+                      <p class="mobile-mega-heading">{{ child_menu.child_menu_title }}</p>
+                    {% endif %}
+                    {% for link in child_menu.child_menu_links %}
+                    <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="mobile-mega-card">
+                      {% if link.image.src %}
+                      <div class="mobile-mega-card-icon">
+                        <img src="{{ link.image.src }}" alt="{{ link.url_text }}" width="38" height="38" loading="lazy">
+                      </div>
+                      {% else %}
+                      <div class="mobile-mega-card-icon">
+                        <svg width="50" height="50" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="16" cy="16.8" r="16" fill="#600087" />
+                          <path d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z" fill="#FFFFFF" />
+                        </svg>
+                      </div>
+                      {% endif %}
+                      <div class="mobile-mega-card-text">
+                        <span class="mobile-mega-card-title">{{ link.url_text }}</span>
+                        {% if link.description %}
+                          <span class="mobile-mega-card-desc">{{ link.description }}</span>
+                        {% endif %}
+                      </div>
+                    </a>
+                    {% endfor %}
+
+                    {% set b_enabled = child_menu.enable_bottom_bar %}
+                    {% set b_links = child_menu.bottom_bar_links %}
+                    {% if b_enabled and b_links|length > 0 %}
+                    <div class="mobile-mega-bottom-bar">
+                      {% for b_link in b_links %}
+                        <a href="{{ b_link.link_url.url.href|default('javascript:void(0)') }}" class="mobile-mega-bottom-link">
+                          {{ b_link.link_text }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </li>
+        {% else %}
+          <li class="nav-li">
+            <a href="{{ navigation_item.url.href }}" class="nav-link">{{ navigation_item.url_text }}</a>
+          </li>
+        {% endif %}
+        {% endfor %}
       </ul>
     </nav>
     {{ render_pill_toggle(true) }}
+
+    {# Mobile Top Utility Menu Items #}
+    {% if module.top_bar.enable_top_bar and module.top_bar.custom_menu|length > 0 %}
+    <div class="mobile-utility-nav">
+      <ul class="mobile-utility-nav__list">
+        {% for item in module.top_bar.custom_menu %}
+          {% if loop.index <= 3 %}
+          <li class="mobile-utility-nav__item">
+            {% set item_href = item.link_url.url.href %}
+            {% if item.link_url.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set item_href = "mailto:" + item_href %}
+            {% elif item.link_url.url.type is equalto "PHONE_NUMBER" %}
+              {% set item_href = "tel:" + item_href %}
+            {% endif %}
+            <a href="{{ item_href|default('javascript:void(0)') }}"
+               class="mobile-utility-nav__link"
+               {% if item.link_url.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}
+               {% if item.link_url.no_follow %}rel="nofollow"{% endif %}>
+              {{ item.link_text }}
+            </a>
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
     <div class="mobile-cta">
       {% for cta in module.ctas %}
-      {% if cta.cta_settings.cta_type == 'cta' %} {% cta guid="{{
-      cta.cta_settings.cta_field }}" %} {% else %}
-      <a class="{{cta.cta_settings.button_settings.button_type}} {{cta.cta_settings.button_settings.button_colour}} header-btn-{{ loop.index }} primary-cta--filled"
-        href="{{ cta.cta_settings.button_settings.button_url.href }}">{{ cta.cta_settings.button_settings.button_text
-        }}</a>
+      {% if cta.cta_settings.cta_type == 'cta' %}
+        {% cta guid="{{ cta.cta_settings.cta_field }}" %}
+      {% else %}
+        <a class="{{ cta.cta_settings.button_settings.button_type }} {{ cta.cta_settings.button_settings.button_colour }} header-btn-{{ loop.index }} primary-cta--filled"
+           href="{{ cta.cta_settings.button_settings.button_url.href|default('javascript:void(0)') }}">{{ cta.cta_settings.button_settings.button_text }}</a>
       {% endif %}
       {% endfor %}
     </div>
   </div>
 
+  {# =========================================================================
+     SEARCH POPUP MODAL (Dynamic Content & Popular Tags)
+     ========================================================================= #}
+  {% if module.top_bar.enable_search %}
+  <div class="search-modal-backdrop" id="headerSearchModal" aria-hidden="true">
+    <div class="search-modal-container">
+      <div class="search-modal-card">
+        <div class="search-modal-header">
+          <h3 class="search-modal-title">{{ module.top_bar.search_popup_title|default('Search the website') }}</h3>
+          <button type="button" class="search-modal-close" aria-label="Close search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form action="{{ module.top_bar.search_url.url.href|default('/_hcms/search') }}" method="GET" class="search-modal-form">
+          <div class="search-modal-input-wrap">
+            <svg class="search-modal-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" name="term" placeholder="{{ module.top_bar.search_placeholder|default('Search for products, resources, or knowledge...') }}" autocomplete="off" class="search-modal-input" />
+            <button type="submit" class="search-modal-submit-btn">Search</button>
+          </div>
+        </form>
+
+        {% if module.top_bar.search_quick_links|length > 0 %}
+        <div class="search-modal-quick-links">
+          <span class="search-modal-quick-label">Popular searches:</span>
+          <div class="search-modal-tags">
+            {% for qlink in module.top_bar.search_quick_links %}
+              <a href="{{ qlink.link_url.url.href|default('javascript:void(0)') }}" class="search-modal-tag"
+                 {% if qlink.link_url.open_in_new_tab %}target="_blank"{% endif %}>
+                {{ qlink.link_text }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </header>
 
 {% require_css %}
 <style>
+  header.header-wrapper {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  header.header-wrapper .content-wrapper {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
   /* Navigation & Pill Toggle Alignment */
   header.header-wrapper .content-wrapper .header-column.navigation {
     display: flex;
@@ -413,8 +700,8 @@ MOBILE MENU
     align-items: center;
     padding: 3px;
     border-radius: 9999px;
-    background-color: {{ p_styles.container_bg_color.color || '#F4F4F6' }};
-    border: 1px solid {{ p_styles.container_border_color.color || '#E5E7EB' }};
+    background-color: {{ p_styles.container_bg_color.color|default('#F4F4F6') }};
+    border: 1px solid {{ p_styles.container_border_color.color|default('#E5E7EB') }};
     box-sizing: border-box;
     gap: 2px;
   }
@@ -429,7 +716,7 @@ MOBILE MENU
     font-weight: 500;
     line-height: 1.2;
     text-decoration: none !important;
-    color: {{ p_styles.inactive_text_color.color || '#4D4D4D' }} !important;
+    color: {{ p_styles.inactive_text_color.color|default('#4D4D4D') }} !important;
     background-color: transparent;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
@@ -439,8 +726,8 @@ MOBILE MENU
 
   .header-pill-toggle__item.is-active,
   .header-pill-toggle__item:hover {
-    background-color: {{ p_styles.active_bg_color.color || '#600087' }} !important;
-    color: {{ p_styles.active_text_color.color || '#FFFFFF' }} !important;
+    background-color: {{ p_styles.active_bg_color.color|default('#600087') }} !important;
+    color: {{ p_styles.active_text_color.color|default('#FFFFFF') }} !important;
     font-weight: 600;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   }
@@ -468,6 +755,415 @@ MOBILE MENU
     header.header-wrapper .content-wrapper .header-column.navigation {
       display: none !important;
     }
+  }
+
+  /* Scoped Mega Dropdown & Search Modal Rules */
+  .main-nav__mega-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height:  35px; top: -30px;
+    background: transparent;
+    pointer-events: auto;
+  }
+
+  .main-nav__mega-dropdown {
+    position: absolute;
+    top: 100%; padding-top: 14px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    width: 100%;
+    max-width: 1240px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+  }
+
+  .nav-li:hover .main-nav__mega-dropdown,
+  .main-nav__mega-dropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .mega-cards-dropdown .mega-dropdown__panel,
+  .mega-columns-dropdown .mega-dropdown__panel {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+  }
+
+  .mega-cards-dropdown .mega-dropdown__body {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .mega-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .mega-card-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    text-decoration: none !important;
+    background-color: transparent;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    box-sizing: border-box;
+  }
+
+  .mega-card-item:hover {
+    background-color: #F1DEF9 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .mega-card-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    padding: 0 !important;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: #F3F4F6;
+    box-sizing: border-box;
+  }
+
+  .mega-card-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .mega-card-icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #600087;
+  }
+
+  .mega-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mega-card-title {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    line-height: 1.35 !important;
+  }
+
+  .mega-card-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: rgba(96, 0, 135, 0.1);
+    color: #600087;
+    white-space: nowrap;
+  }
+
+  .mega-card-desc {
+    font-size: 13px !important;
+    margin: 0 !important;
+    font-weight: 400 !important;
+    line-height: 1.35 !important;
+    color: #4B5563 !important;
+  }
+
+  .mega-divider {
+    height: 1px;
+    width: 100%;
+    background-color: #E5E7EB;
+    border: none;
+    margin: 4px 0;
+  }
+
+  .mega-dropdown-bottom-bar {
+    background-color: #F9FAFB;
+    padding: 16px 32px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-top: 1px solid #E5E7EB;
+  }
+
+  .mega-bottom-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+  }
+
+  .mega-bottom-link:hover {
+    color: #600087 !important;
+  }
+
+  .mega-bottom-sep {
+    width: 1px;
+    height: 18px;
+    background-color: #D1D5DB;
+    display: inline-block;
+  }
+
+  .mega-columns-dropdown {
+    width: auto !important;
+    min-width: 580px;
+  }
+
+  .mega-columns-wrapper {
+    display: flex;
+    gap: 32px;
+    align-items: stretch;
+    padding: 32px;
+  }
+
+  .mega-column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 160px;
+  }
+
+  .mega-column-title {
+    margin: 0 !important;
+    text-transform: uppercase !important;
+    font-size: 13px !important;
+    color: #9CA3AF !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.4 !important;
+  }
+
+  .mega-column-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mega-column-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: #1F2937 !important;
+    line-height: 1.4 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .mega-column-link:hover {
+    color: #600087 !important;
+    transform: translateX(2px);
+  }
+
+  .mega-column-divider {
+    width: 1px;
+    background-color: #E5E7EB;
+    align-self: stretch;
+    flex-shrink: 0;
+  }
+
+  /* Search Modal Popup */
+  .search-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: rgba(17, 24, 39, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10vh;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .search-modal-backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .search-modal-container {
+    width: 100%;
+    max-width: 640px;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .search-modal-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transform: translateY(-16px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .search-modal-backdrop.is-open .search-modal-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .search-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 16px 28px;
+  }
+
+  .search-modal-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    margin: 0 !important;
+  }
+
+  .search-modal-close {
+    background: #F3F4F6;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6B7280;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .search-modal-close:hover {
+    background-color: #E5E7EB;
+    color: #111827;
+  }
+
+  .search-modal-form {
+    padding: 0 28px 24px 28px;
+  }
+
+  .search-modal-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #F9FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 6px 14px;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .search-modal-input-wrap:focus-within {
+    border-color: #600087;
+    background-color: #FFFFFF;
+  }
+
+  .search-modal-input-icon {
+    color: #9CA3AF;
+    flex-shrink: 0;
+  }
+
+  .search-modal-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 8px 0;
+    font-size: 15px;
+    outline: none;
+    color: #111827;
+  }
+
+  .search-modal-submit-btn {
+    background-color: #600087;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .search-modal-submit-btn:hover {
+    opacity: 0.9;
+  }
+
+  .search-modal-quick-links {
+    padding: 16px 28px 22px 28px;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-modal-quick-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6B7280;
+    margin-right: 4px;
+  }
+
+  .search-modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .search-modal-tag {
+    background: #F3F4F6;
+    border-radius: 9999px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .search-modal-tag:hover {
+    background: rgba(96, 0, 135, 0.1);
+    color: #600087 !important;
+  }
+
+  body.search-open {
+    overflow: hidden;
   }
 
   {% for cta in module.ctas %}
