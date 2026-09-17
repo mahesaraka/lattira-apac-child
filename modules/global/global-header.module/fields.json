@@ -103,6 +103,168 @@
     }
   },
   {
+    "id": "144ff2c0-f554-4c44-993a-45832c250bdd",
+    "name": "top_bar",
+    "label": "Top Utility Bar (Search & Custom Menu)",
+    "required": false,
+    "locked": false,
+    "type": "group",
+    "children": [
+      {
+        "id": "57676a46-55f9-49be-9bff-645950208bf4",
+        "name": "enable_top_bar",
+        "label": "Enable Top Utility Bar",
+        "required": false,
+        "locked": false,
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "id": "affd29c7-55c9-4d52-aeec-7c94ef548eb2",
+        "name": "enable_search",
+        "label": "Enable Search Icon",
+        "required": false,
+        "locked": false,
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "id": "7588284c-9025-4af3-8a7b-f179eeca8c07",
+        "name": "search_url",
+        "label": "Search Results Page URL",
+        "required": false,
+        "locked": false,
+        "type": "link",
+        "supported_types": [
+          "EXTERNAL",
+          "CONTENT"
+        ],
+        "show_advanced_rel_options": false,
+        "default": {
+          "url": {
+            "type": "EXTERNAL",
+            "href": "/_hcms/search"
+          },
+          "open_in_new_tab": false,
+          "no_follow": false
+        }
+      },
+      {
+        "id": "cfe8a853-74b0-4655-9917-114853b0a59b",
+        "name": "custom_menu",
+        "label": "Custom Menu (Max 3 Items)",
+        "required": false,
+        "locked": false,
+        "type": "group",
+        "occurrence": {
+          "min": 0,
+          "max": 3,
+          "sorting_label_field": null,
+          "default": 0
+        },
+        "children": [
+          {
+            "id": "8f9945dd-1e8b-427e-adb7-a18e798d5a05",
+            "name": "link_text",
+            "label": "Link Text",
+            "required": true,
+            "locked": false,
+            "type": "text",
+            "default": "Link"
+          },
+          {
+            "id": "d2ef3765-61f4-4ba4-bfe4-069b59ab997d",
+            "name": "link_url",
+            "label": "Link URL",
+            "required": true,
+            "locked": false,
+            "type": "link",
+            "supported_types": [
+              "EXTERNAL",
+              "CONTENT",
+              "FILE",
+              "EMAIL_ADDRESS",
+              "BLOG",
+              "CALL_TO_ACTION",
+              "PHONE_NUMBER"
+            ],
+            "show_advanced_rel_options": false,
+            "default": {
+              "url": {
+                "type": "EXTERNAL",
+                "href": "#"
+              },
+              "open_in_new_tab": false,
+              "no_follow": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "tb_search_popup_title",
+        "name": "search_popup_title",
+        "label": "Search Popup Heading",
+        "required": false,
+        "locked": false,
+        "type": "text",
+        "default": "Search website"
+      },
+      {
+        "id": "tb_search_placeholder",
+        "name": "search_placeholder",
+        "label": "Search Input Placeholder",
+        "required": false,
+        "locked": false,
+        "type": "text",
+        "default": "Search for products, resources, or knowledge..."
+      },
+      {
+        "id": "tb_search_quick_links",
+        "name": "search_quick_links",
+        "label": "Search Popular / Quick Links (Optional)",
+        "required": false,
+        "locked": false,
+        "type": "group",
+        "occurrence": {
+          "min": 0,
+          "max": 6,
+          "sorting_label_field": null,
+          "default": 0
+        },
+        "children": [
+          {
+            "id": "sql_text",
+            "name": "link_text",
+            "label": "Quick Link Label",
+            "required": true,
+            "locked": false,
+            "type": "text",
+            "default": "Quick Link"
+          },
+          {
+            "id": "sql_url",
+            "name": "link_url",
+            "label": "Quick Link URL",
+            "required": true,
+            "locked": false,
+            "type": "link",
+            "supported_types": [
+              "EXTERNAL",
+              "CONTENT",
+              "BLOG"
+            ],
+            "default": {
+              "url": {
+                "type": "EXTERNAL",
+                "href": "#"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "6f654242-5b69-fe03-765e-3485be5c7d07",
     "name": "navigation",
     "label": "Navigation",
@@ -194,12 +356,24 @@
                 "display": "select",
                 "choices": [
                   [
+                    "cards",
+                    "Cards Grid (Image, Title, Description)"
+                  ],
+                  [
+                    "columns",
+                    "Multi-Column Lists (Dividers & Categories)"
+                  ],
+                  [
+                    "simple",
+                    "Simple List"
+                  ],
+                  [
                     "show_desc",
-                    "Show Descriptions"
+                    "Show Descriptions (Classic)"
                   ],
                   [
                     "hide_desc",
-                    "Hide Descriptions"
+                    "Hide Descriptions (Classic)"
                   ]
                 ],
                 "multiple": false,
@@ -207,7 +381,7 @@
                 "preset": null,
                 "type": "choice",
                 "display_width": null,
-                "default": "show_desc"
+                "default": "cards"
               },
               {
                 "id": "a40e7ada-a4a4-2526-8ed6-f370594f3b75",
@@ -264,6 +438,44 @@
                       "href": "",
                       "type": "EXTERNAL"
                     }
+                  },
+                  {
+                    "id": "child_link_description",
+                    "name": "description",
+                    "label": "Description",
+                    "required": false,
+                    "locked": false,
+                    "type": "text",
+                    "display_width": null,
+                    "default": ""
+                  },
+                  {
+                    "id": "child_link_image",
+                    "name": "image",
+                    "label": "Icon / Image",
+                    "required": false,
+                    "locked": false,
+                    "responsive": true,
+                    "resizable": true,
+                    "show_loading": true,
+                    "type": "image",
+                    "display_width": null,
+                    "default": {
+                      "size_type": "auto",
+                      "src": "",
+                      "alt": "",
+                      "loading": "lazy"
+                    }
+                  },
+                  {
+                    "id": "child_link_badge",
+                    "name": "badge",
+                    "label": "Badge Text (Optional)",
+                    "required": false,
+                    "locked": false,
+                    "type": "text",
+                    "display_width": null,
+                    "default": ""
                   }
                 ],
                 "tab": "CONTENT",
@@ -272,6 +484,66 @@
                 "type": "group",
                 "display_width": null,
                 "default": []
+              },
+              {
+                "id": "cm_enable_bottom_bar",
+                "name": "enable_bottom_bar",
+                "label": "Enable Bottom Action Bar",
+                "required": false,
+                "locked": false,
+                "type": "boolean",
+                "default": false
+              },
+              {
+                "id": "cm_bottom_bar_links",
+                "name": "bottom_bar_links",
+                "label": "Bottom Action Bar Links",
+                "required": false,
+                "locked": false,
+                "type": "group",
+                "occurrence": {
+                  "min": 0,
+                  "max": 5,
+                  "sorting_label_field": null,
+                  "default": 0
+                },
+                "children": [
+                  {
+                    "id": "bbl_text",
+                    "name": "link_text",
+                    "label": "Link Text",
+                    "required": true,
+                    "locked": false,
+                    "type": "text",
+                    "default": "Action Link"
+                  },
+                  {
+                    "id": "bbl_url",
+                    "name": "link_url",
+                    "label": "Link URL",
+                    "required": true,
+                    "locked": false,
+                    "type": "link",
+                    "supported_types": [
+                      "EXTERNAL",
+                      "CONTENT",
+                      "FILE",
+                      "EMAIL_ADDRESS",
+                      "BLOG",
+                      "CALL_TO_ACTION",
+                      "PHONE_NUMBER"
+                    ],
+                    "show_advanced_rel_options": false,
+                    "default": {
+                      "url": {
+                        "type": "EXTERNAL",
+                        "href": "#"
+                      },
+                      "open_in_new_tab": false,
+                      "no_follow": false
+                    }
+                  }
+                ]
               }
             ],
             "tab": "CONTENT",
