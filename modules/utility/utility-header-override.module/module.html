@@ -519,8 +519,16 @@
                 {% elif layout_setting == 'simple' %}
                   <ul class="nav-child-ul">
                     {% for link in child_menu.child_menu_links %}
-                    <li class="nav-child-li">
+                    <li class="nav-child-li {% if link.child_menu_items|length > 0 %}has-child{% endif %}">
                       <a href="{{ link.url_field.href|default('javascript:void(0)') }}" class="nav-link">
+                        {% if link.image.src %}
+                          <img src="{{ link.image.src }}" alt="{{ link.url_text }}" width="24" height="24" style="width: 24px; height: 24px; object-fit: contain; flex-shrink: 0;" loading="lazy">
+                        {% else %}
+                          <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; flex-shrink: 0;">
+                            <circle cx="16" cy="16.8" r="16" fill="#600087" />
+                            <path d="M22.6999 17.3002L17.3999 22.6002C17.0999 22.9002 16.4999 22.9002 16.1999 22.6002C15.8999 22.3002 15.8999 21.7002 16.1999 21.4002L19.9999 17.6002H9.7999C9.2999 17.6002 8.8999 17.2002 8.8999 16.7002C8.8999 16.2002 9.2999 15.8002 9.7999 15.8002H19.9999L16.1999 12.0002C15.8999 11.7002 15.8999 11.1002 16.1999 10.8002C16.4999 10.5002 17.0999 10.5002 17.3999 10.8002L22.6999 16.1002C22.9999 16.4002 22.9999 17.0002 22.6999 17.3002Z" fill="#FFFFFF" />
+                          </svg>
+                        {% endif %}
                         <span>{{ link.url_text }}</span>
                       </a>
                     </li>
@@ -755,6 +763,54 @@
     header.header-wrapper .content-wrapper .header-column.navigation {
       display: none !important;
     }
+  }
+
+  /* Prevent checklist icons in mobile header and style simple child menu */
+  header.header-wrapper li::before,
+  header.header-wrapper ul li::before,
+  .mobile-menu-content li::before,
+  .mobile-menu-content ul li::before,
+  .mobile-menu-content .nav-child-li::before,
+  .nav-child-li::before,
+  .nav-child-ul li::before,
+  .nav-ul li::before,
+  .accordion-content li::before,
+  .mobile-utility-nav li::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .mobile-menu-content nav ul.nav-ul li.nav-li ul.nav-child-ul {
+    list-style: none !important;
+    padding: 8px 0 12px 0 !important;
+    margin: 0 !important;
+  }
+
+  .mobile-menu-content nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li {
+    padding: 8px 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+    list-style: none !important;
+  }
+
+  .mobile-menu-content nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li a.nav-link {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #1B1B1B !important;
+    text-decoration: none !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    transition: 0.2s ease;
+  }
+
+  .mobile-menu-content nav ul.nav-ul li.nav-li ul.nav-child-ul li.nav-child-li a.nav-link svg {
+    width: 24px !important;
+    height: 24px !important;
+    flex-shrink: 0 !important;
+    opacity: 1 !important;
   }
 
   /* Scoped Mega Dropdown & Search Modal Rules */
