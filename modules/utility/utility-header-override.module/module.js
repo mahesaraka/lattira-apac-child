@@ -30,11 +30,191 @@
     window.addEventListener('resize', updateHeaderOffset);
     handleScroll();
 
-    // Search Modal Handler
+    // Search Modal Handler with Live In-Modal Results
     const searchModal = headerWrapper.querySelector('.search-modal-backdrop') || document.querySelector('.search-modal-backdrop');
     const searchTriggers = headerWrapper.querySelectorAll('.js-open-search-modal, .header-search__toggle, .main-nav-mobile__search-btn');
     const searchCloseBtns = searchModal ? searchModal.querySelectorAll('.search-modal-close, .js-close-search-modal') : [];
     const searchInput = searchModal ? searchModal.querySelector('.search-modal-input') : null;
+    const searchForm = searchModal ? searchModal.querySelector('.search-modal-form') : null;
+    const searchClearBtn = searchModal ? searchModal.querySelector('.search-modal-clear-btn') : null;
+    const searchResultsWrap = searchModal ? searchModal.querySelector('.search-modal-results-wrap') : null;
+    const searchLoading = searchModal ? searchModal.querySelector('.search-modal-loading') : null;
+    const searchResultsHeader = searchModal ? searchModal.querySelector('.search-modal-results-header') : null;
+    const searchResultsCount = searchModal ? searchModal.querySelector('.search-modal-results-count') : null;
+    const searchResultsList = searchModal ? searchModal.querySelector('.search-modal-results-list') : null;
+    const searchEmpty = searchModal ? searchModal.querySelector('.search-modal-empty') : null;
+    const searchFooter = searchModal ? searchModal.querySelector('.search-modal-footer') : null;
+    const searchViewAllLink = searchModal ? searchModal.querySelector('.search-modal-view-all-link') : null;
+    const searchQuickLinks = searchModal ? searchModal.querySelector('.search-modal-quick-links') : null;
+
+    let searchDebounceTimer = null;
+    let currentSearchAbort = null;
+
+    function getSearchDomain() {
+      if (searchForm && searchForm.dataset.searchDomain) {
+        return searchForm.dataset.searchDomain.trim();
+      }
+      const host = window.location.hostname;
+      if (host && host.indexOf('lattira.com') !== -1) {
+        return host;
+      }
+      return 'www.lattira.com';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function sanitizeSnippet(html) {
+      if (!html) return '';
+      return html
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
+    }
+
+    function formatTypeBadge(type) {
+      if (!type) return { label: 'Page', class: 'badge-page' };
+      const t = String(type).toUpperCase();
+      if (t === 'BLOG_POST') return { label: 'Blog Post', class: 'badge-post' };
+      if (t === 'LISTING_PAGE') return { label: 'Blog', class: 'badge-blog' };
+      return { label: 'Page', class: 'badge-page' };
+    }
+
+    function resetSearchUI() {
+      if (searchResultsWrap) searchResultsWrap.style.display = 'none';
+      if (searchLoading) searchLoading.style.display = 'none';
+      if (searchResultsHeader) searchResultsHeader.style.display = 'none';
+      if (searchResultsList) searchResultsList.innerHTML = '';
+      if (searchEmpty) {
+        searchEmpty.style.display = 'none';
+        searchEmpty.innerHTML = '';
+      }
+      if (searchFooter) searchFooter.style.display = 'none';
+      if (searchClearBtn) searchClearBtn.style.display = 'none';
+      if (searchQuickLinks) searchQuickLinks.style.display = '';
+    }
+
+    function performSearch(query) {
+      const term = (query || '').trim();
+      if (searchClearBtn) {
+        searchClearBtn.style.display = term.length > 0 ? 'flex' : 'none';
+      }
+
+      if (term.length < 2) {
+        resetSearchUI();
+        return;
+      }
+
+      if (currentSearchAbort) {
+        try { currentSearchAbort.abort(); } catch(e) {}
+      }
+      if (window.AbortController) {
+        currentSearchAbort = new AbortController();
+      }
+
+      if (searchQuickLinks) searchQuickLinks.style.display = 'none';
+      if (searchResultsWrap) searchResultsWrap.style.display = 'block';
+      if (searchLoading) searchLoading.style.display = 'flex';
+      if (searchResultsHeader) searchResultsHeader.style.display = 'none';
+      if (searchEmpty) searchEmpty.style.display = 'none';
+      if (searchFooter) searchFooter.style.display = 'none';
+      if (searchResultsList) searchResultsList.innerHTML = '';
+
+      const domain = getSearchDomain();
+      const endpoint = `/_hcms/search?term=${encodeURIComponent(term)}&domain=${encodeURIComponent(domain)}&type=SITE_PAGE&type=BLOG_POST&type=LISTING_PAGE&limit=10`;
+
+      fetch(endpoint, {
+        signal: currentSearchAbort ? currentSearchAbort.signal : undefined,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error('Search failed: ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        if (searchLoading) searchLoading.style.display = 'none';
+
+        const results = data && Array.isArray(data.results) ? data.results : [];
+        const total = typeof data.total === 'number' ? data.total : results.length;
+
+        if (results.length === 0) {
+          if (searchResultsHeader) searchResultsHeader.style.display = 'none';
+          if (searchResultsList) searchResultsList.innerHTML = '';
+          if (searchEmpty) {
+            searchEmpty.style.display = 'block';
+            searchEmpty.innerHTML = `
+              <div class="search-empty-content">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+                <p class="search-empty-title">No results found for "${escapeHtml(term)}"</p>
+                <p class="search-empty-desc">No content on <strong>${escapeHtml(domain)}</strong> matched your search. Try another keyword or phrase.</p>
+              </div>
+            `;
+          }
+          return;
+        }
+
+        if (searchResultsHeader && searchResultsCount) {
+          searchResultsHeader.style.display = 'flex';
+          searchResultsCount.innerHTML = `Found <strong>${total}</strong> result${total === 1 ? '' : 's'} for "<strong>${escapeHtml(term)}</strong>"`;
+        }
+
+        let html = '';
+        results.forEach(function(item) {
+          const badge = formatTypeBadge(item.type);
+          const title = sanitizeSnippet(item.title) || 'Untitled Page';
+          const desc = sanitizeSnippet(item.description);
+          const url = item.url || '#';
+
+          html += `
+            <a href="${escapeHtml(url)}" class="search-result-item">
+              <div class="search-result-item__top">
+                <span class="search-result-item__badge ${badge.class}">${badge.label}</span>
+                <span class="search-result-item__url">${escapeHtml(url)}</span>
+              </div>
+              <h4 class="search-result-item__title">${title}</h4>
+              ${desc ? `<p class="search-result-item__desc">${desc}</p>` : ''}
+              <div class="search-result-item__action">
+                <span>View content</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </div>
+            </a>
+          `;
+        });
+
+        if (searchResultsList) {
+          searchResultsList.innerHTML = html;
+        }
+
+        const customSearchUrl = searchForm ? searchForm.dataset.searchUrl : null;
+        if (customSearchUrl && customSearchUrl.trim().length > 0 && searchFooter && searchViewAllLink) {
+          searchFooter.style.display = 'block';
+          searchViewAllLink.href = `${customSearchUrl}?term=${encodeURIComponent(term)}`;
+          searchViewAllLink.textContent = `View all ${total} results on search page →`;
+        }
+      })
+      .catch(function(err) {
+        if (err.name === 'AbortError') return;
+        if (searchLoading) searchLoading.style.display = 'none';
+        if (searchEmpty) {
+          searchEmpty.style.display = 'block';
+          searchEmpty.innerHTML = `
+            <div class="search-empty-content">
+              <p class="search-empty-title">Search Service Unavailable</p>
+              <p class="search-empty-desc">Unable to retrieve results. Please try again.</p>
+            </div>
+          `;
+        }
+      });
+    }
 
     function openSearchModal() {
       if (!searchModal) return;
@@ -84,6 +264,41 @@
       }
     });
 
+    if (searchForm) {
+      searchForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+        if (searchInput) {
+          performSearch(searchInput.value);
+        }
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const query = searchInput.value;
+        if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+        if (query.trim().length === 0) {
+          resetSearchUI();
+          return;
+        }
+        searchDebounceTimer = setTimeout(function () {
+          performSearch(query);
+        }, 280);
+      });
+    }
+
+    if (searchClearBtn) {
+      searchClearBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
+        resetSearchUI();
+      });
+    }
+
     // Quick link search tag click helper
     if (searchModal) {
       searchModal.querySelectorAll('.search-modal-tag').forEach(function (tag) {
@@ -94,8 +309,8 @@
             const term = tag.textContent.trim();
             if (searchInput) {
               searchInput.value = term;
-              const form = tag.closest('.search-modal-card') ? tag.closest('.search-modal-card').querySelector('.search-modal-form') : null;
-              if (form) form.submit();
+              if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+              performSearch(term);
             }
           }
         });

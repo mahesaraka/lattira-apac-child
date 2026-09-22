@@ -143,7 +143,7 @@
         "default": {
           "url": {
             "type": "EXTERNAL",
-            "href": "/_hcms/search"
+            "href": ""
           },
           "open_in_new_tab": false,
           "no_follow": false
@@ -217,6 +217,16 @@
         "locked": false,
         "type": "text",
         "default": "Search for products, resources, or knowledge..."
+      },
+      {
+        "id": "tb_search_domain",
+        "name": "search_domain",
+        "label": "Domain Filter (Optional)",
+        "help_text": "Defaults to active domain (e.g. www.lattira.com). Only results from this domain will be returned.",
+        "required": false,
+        "locked": false,
+        "type": "text",
+        "default": "www.lattira.com"
       },
       {
         "id": "tb_search_quick_links",
